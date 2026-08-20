@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 const Login = () => {
   const [emailId, setEmailId] = useState("jesus@gmail.com");
@@ -110,12 +110,13 @@ const Login = () => {
           {/* Signup */}
           <p className="text-center text-gray-400 text-sm mt-6">
             Don't have an account?{" "}
-            <a
+            <Link
+              to="/signup"
               href="#"
               className="text-indigo-400 hover:text-indigo-300 font-semibold"
             >
               Create one
-            </a>
+            </Link>
           </p>
         </div>
 

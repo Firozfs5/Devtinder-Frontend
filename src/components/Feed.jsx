@@ -25,6 +25,25 @@ function Feed() {
     getFeed();
   }, []);
 
+  if (!feed) return null;
+
+  if (feed.length === 0) {
+    return (
+      <div className="flex min-h-[calc(100vh-74px)] items-center justify-center bg-[#1c222b] px-4">
+        <div className="text-center">
+          <div className="mb-5 text-6xl">🎉</div>
+
+          <h2 className="text-3xl font-bold text-white">No more developers!</h2>
+
+          <p className="mt-3 max-w-md text-gray-400">
+            You've gone through everyone available in your feed. Check back
+            later for new developers.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center py-10">
       {feed && <UserCard user={feed[0]} />}
