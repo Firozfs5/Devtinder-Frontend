@@ -64,11 +64,11 @@ function EditProfile() {
         withCredentials: true,
       });
 
-      dispatch(addUser(res.data));
+      dispatch(addUser(res.data.updatedData));
       setToastShow(true);
       setTimeout(() => setToastShow(false), 3000);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
