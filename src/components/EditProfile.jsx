@@ -7,9 +7,8 @@ import UserCard from "./UserCard";
 
 function EditProfile() {
   const user = useSelector((store) => store.user);
-  const dispatch = useDispatch();
   const [toastShow, setToastShow] = useState(false);
-
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
@@ -71,6 +70,16 @@ function EditProfile() {
       console.error(err);
     }
   };
+  if (!user) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#1c222b]">
+        <div className="flex flex-col items-center gap-4">
+          <span className="loading loading-spinner loading-lg text-indigo-500"></span>
+          <p className="text-gray-400">Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#1c222b] px-4 py-10">

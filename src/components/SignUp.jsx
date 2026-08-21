@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Signup() {
   const navigate = useNavigate();
-
+  const userData = useSelector((store) => store.user);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -49,6 +50,10 @@ function Signup() {
       setError(err.response?.data || "Something went wrong. Please try again.");
     }
   };
+
+  useEffect(() => {
+    if (userData) navigate("/feed");
+  }, []);
 
   return (
     <div className="min-h-[calc(100vh-74px)] bg-[#1c222b] flex items-center justify-center px-4 py-10">

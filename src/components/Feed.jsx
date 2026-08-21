@@ -10,7 +10,6 @@ function Feed() {
   const feed = useSelector((store) => store.feed);
 
   const getFeed = async () => {
-    if (feed) return;
     try {
       const feeds = await axios.get(BASE_URL + "/feed", {
         withCredentials: true,
@@ -22,10 +21,12 @@ function Feed() {
   };
 
   useEffect(() => {
-    getFeed();
-  }, []);
+    if (feed === null || feed.length === 0) {
+      getFeed();
+    }
+  }, [feed]);
 
-  if (!feed) return null;
+  if (!feed) return <h1>Loading....</h1>;
 
   if (feed.length === 0) {
     return (
