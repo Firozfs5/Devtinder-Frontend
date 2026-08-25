@@ -1,8 +1,9 @@
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
-import { addRequests } from "../utils/requestSlice";
+import { addRequests, removeUserRequests } from "../utils/requestSlice";
 import { useEffect } from "react";
+import { reduceReqCount } from "../utils/userSlice";
 
 function Requests() {
   const dispatch = useDispatch();
@@ -22,12 +23,13 @@ function Requests() {
 
   const handleReview = async (status, requestId) => {
     try {
-      const review = await axios.post(
+      await axios.post(
         BASE_URL + `/requests/review/${status}/${requestId}`,
         {},
         { withCredentials: true },
       );
-      console.log(review);
+      dispatch(removeUserRequests(requestId));
+      dispatch(reduceReqCount());
     } catch (err) {
       console.log(err);
     }
@@ -35,7 +37,7 @@ function Requests() {
 
   useEffect(() => {
     getRequests();
-  }, [requests]);
+  }, []);
 
   if (!requests) {
     return (

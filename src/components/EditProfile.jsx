@@ -254,10 +254,10 @@ function EditProfile() {
       </div>
       {/*toast code to show profile update */}
       {toastShow && (
-        <div className="toast toast-top toast-center">
-          <div className="alert alert-success">
-            <span className="bold text-md text-black">
-              Profile Updated successfully.
+        <div className="fixed top-5 left-1/2 z-9999 -translate-x-1/2">
+          <div className="rounded-xl bg-green-500 px-6 py-3 text-white shadow-2xl">
+            <span className="font-semibold">
+              ✓ Profile Updated Successfully
             </span>
           </div>
         </div>

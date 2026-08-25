@@ -1,7 +1,7 @@
-import EditProfile from "./EditProfile";
+import ViewProfile from "./ViewProfile";
 
 const Profile = () => {
-  return <EditProfile />;
+  return <ViewProfile />;
 };
 
 export default Profile;

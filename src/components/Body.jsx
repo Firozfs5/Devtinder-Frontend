@@ -55,7 +55,7 @@ const Body = () => {
         <Outlet />
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

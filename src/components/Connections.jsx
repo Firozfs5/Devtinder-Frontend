@@ -31,9 +31,11 @@ import { BASE_URL } from "../utils/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnections } from "../utils/connectionSlice";
+import { useNavigate } from "react-router-dom";
 
 const Connections = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const connections = useSelector((store) => store.connections);
 
@@ -125,7 +127,10 @@ const Connections = () => {
 
                 {/* Buttons */}
                 <div className="flex gap-3 mt-6">
-                  <button className="btn btn-primary btn-sm flex-1">
+                  <button
+                    onClick={() => navigate(`/profile/${connection._id}`)}
+                    className="btn btn-primary btn-sm flex-1"
+                  >
                     View Profile
                   </button>
 
