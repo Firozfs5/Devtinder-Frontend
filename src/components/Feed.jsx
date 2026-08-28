@@ -26,7 +26,15 @@ function Feed() {
     }
   }, [feed]);
 
-  if (!feed) return <h1>Loading....</h1>;
+  if (!feed)
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#1c222b]">
+        <div className="flex flex-col items-center gap-4">
+          <span className="loading loading-spinner loading-lg text-indigo-500"></span>
+          <p className="text-gray-400">Loading profile...</p>
+        </div>
+      </div>
+    );
 
   if (feed.length === 0) {
     return (
