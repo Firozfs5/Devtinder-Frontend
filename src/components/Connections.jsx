@@ -1,31 +1,3 @@
-// import axios from "axios";
-// import { BASE_URL } from "../utils/constants";
-// import { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { addConnections } from "../utils/connectionSlice";
-
-// const Connections = () => {
-//   const dispatch = useDispatch();
-//   const connections = useSelector((store) => store.connections);
-//   const getConnections = async () => {
-//     try {
-//       const connections = await axios.get(BASE_URL + "/user/connections", {
-//         withCredentials: true,
-//       });
-//       dispatch(addConnections(connections.data));
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-//   useEffect(() => {
-//     getConnections();
-//   }, []);
-
-//   return <div>Connections</div>;
-// };
-
-// export default Connections;
-
 import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useEffect } from "react";
@@ -134,7 +106,10 @@ const Connections = () => {
                     View Profile
                   </button>
 
-                  <button className="btn btn-outline btn-sm flex-1">
+                  <button
+                    onClick={() => navigate(`/chat/${connection._id}`)}
+                    className="btn btn-outline btn-sm flex-1"
+                  >
                     Message
                   </button>
                 </div>

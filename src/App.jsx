@@ -12,6 +12,7 @@ import ChangePassword from "./components/ChangePassword";
 import ViewProfile from "./components/ViewProfile";
 import EditProfile from "./components/EditProfile";
 import Settings from "./components/Settings";
+import Chat from "./components/Chat";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/profile/:userId" element={<ViewProfile />} />
               <Route path="/profile/edit" element={<EditProfile />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/chat/:targetUserId" element={<Chat />} />
             </Route>
           </Routes>
         </BrowserRouter>
