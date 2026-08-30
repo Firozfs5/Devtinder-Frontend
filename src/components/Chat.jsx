@@ -1,32 +1,10 @@
-// const Chat = () => {
-//   return <h1>Chat</h1>;
-// };
-// {
-//   id: 1,
-//   text: "Hey! How are you?",
-//   sender: "other",
-//   time: "10:30 PM",
-// },
-// {
-//   id: 2,
-//   text: "I'm good! What are you working on?",
-//   sender: "me",
-//   time: "10:31 PM",
-// },
-// {
-//   id: 3,
-//   text: "I'm building a MERN project 🔥",
-//   sender: "other",
-//   time: "10:32 PM",
-// },
-// export default Chat;
-
 import { useEffect, useRef, useState } from "react";
 import { Send, Video, Paperclip, CheckCheck } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import createSocketConnection from "../config/socket";
-
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 const Chat = () => {
   const { targetUserId } = useParams();
   const [message, setMessage] = useState("");
@@ -35,6 +13,27 @@ const Chat = () => {
   const userId = user._id;
 
   const [messages, setMessages] = useState([]);
+
+  const fetchChatMessages = async () => {
+    const chat = await axios.get(BASE_URL + "/chat/" + targetUserId, {
+      withCredentials: true,
+    });
+
+    // console.log(chat?.data?.messages);
+    const chatMessages = chat?.data?.messages.map((msg) => {
+      return {
+        senderId: msg.senderId,
+        text: msg.text,
+        _id: msg._id,
+        createdAt: msg.createdAt,
+      };
+    });
+
+    setMessages(chatMessages);
+  };
+  useEffect(() => {
+    fetchChatMessages();
+  }, []);
 
   useEffect(() => {
     if (!userId) return;
@@ -49,7 +48,7 @@ const Chat = () => {
 
     socketRef.current.on("messageRecieved", (messageObj) => {
       // console.log(messageObj.sender + ":" + messageObj.text);
-      console.log(messageObj);
+      // console.log(messageObj);
       setMessages((prev) => [...prev, messageObj]);
     });
 
@@ -65,13 +64,9 @@ const Chat = () => {
     if (!message.trim()) return;
 
     const messageObj = {
-      id: Date.now(),
       text: message,
-      sender: user.firstName,
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      senderId: user._id,
+
       targetUserId,
       userId,
     };
@@ -111,14 +106,17 @@ const Chat = () => {
         <div className="flex flex-col gap-2">
           {messages.map((msg) => (
             <div
-              key={msg.id}
+              key={msg?.id}
               className={`flex ${
-                msg.sender === user.firstName ? "justify-end" : "justify-start"
+                msg?.senderId?.toString() === user?._id.toString()
+                  ? "justify-end"
+                  : "justify-start"
               }`}
             >
+              {console.log(msg)}
               <div
                 className={`max-w-[70%] px-3.5 py-2 ${
-                  msg.sender === user.firstName
+                  msg?.senderId?.toString() === user?._id.toString()
                     ? "rounded-2xl rounded-br-sm bg-indigo-600 text-white"
                     : "rounded-2xl rounded-bl-sm bg-gray-800 text-gray-200"
                 }`}
@@ -127,14 +125,21 @@ const Chat = () => {
 
                 <div
                   className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
-                    msg.sender === user.firstName
+                    msg?.senderId?.toString() === user?._id.toString()
                       ? "text-indigo-200"
                       : "text-gray-500"
                   }`}
                 >
-                  <span>{msg.time}</span>
+                  <span>
+                    {new Date(msg.createdAt).toLocaleTimeString("en-IN", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
 
-                  {msg.sender !== user.firstName && <CheckCheck size={12} />}
+                  {msg?.senderId?.toString() === user?._id.toString() && (
+                    <CheckCheck size={12} />
+                  )}
                 </div>
               </div>
             </div>
