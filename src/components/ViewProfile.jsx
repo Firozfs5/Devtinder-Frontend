@@ -46,9 +46,7 @@ const ViewProfile = () => {
   let connectBtn = "connect";
 
   if (profileUser) {
-    console.log("hi");
     connectBtn = profileUser?.connectionStatus;
-    console.log(profileUser);
   }
 
   if (loading) {
@@ -136,7 +134,10 @@ const ViewProfile = () => {
                     {connectBtn == "none" ? "Connect" : connectBtn}
                   </button>
 
-                  <button className="rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600">
+                  <button
+                    onClick={() => navigate(`/chat/${profileUser._id}`)}
+                    className="rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
+                  >
                     Message
                   </button>
                 </div>

@@ -103,11 +103,6 @@ function Requests() {
                 </div>
 
                 {/* About */}
-                <div className="mt-5">
-                  <p className="text-gray-400 text-sm leading-6 line-clamp-3">
-                    {request.about || "No bio available."}
-                  </p>
-                </div>
 
                 {/* Actions */}
                 <div className="flex gap-3 mt-6">
