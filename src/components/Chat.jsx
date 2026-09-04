@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Send, Video, Paperclip, CheckCheck } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import createSocketConnection from "../config/socket";
 import axios from "axios";
@@ -17,6 +17,7 @@ const Chat = () => {
   const chatData = useSelector((store) => store.chat);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const socketRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -189,6 +190,7 @@ const Chat = () => {
 
         <button
           type="button"
+          onClick={() => navigate("/videoCall/" + targetUserId)}
           className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-800 hover:text-white"
         >
           <Video size={19} />
@@ -212,11 +214,10 @@ const Chat = () => {
                 {/* Message bubble */}
 
                 <div
-                  className={`max-w-[75%] px-4 py-2.5 ${
-                    isMine
-                      ? "rounded-2xl rounded-br-md bg-indigo-600 text-white"
-                      : "rounded-2xl rounded-bl-md bg-gray-800 text-gray-200"
-                  }`}
+                  className={`max-w-[75%] px-4 py-2.5 ${isMine
+                    ? "rounded-2xl rounded-br-md bg-indigo-600 text-white"
+                    : "rounded-2xl rounded-bl-md bg-gray-800 text-gray-200"
+                    }`}
                 >
                   {/* Message text */}
 
@@ -227,9 +228,8 @@ const Chat = () => {
                   {/* Time + status */}
 
                   <div
-                    className={`mt-1.5 flex items-center justify-end gap-1 text-[10px] ${
-                      isMine ? "text-indigo-200" : "text-gray-500"
-                    }`}
+                    className={`mt-1.5 flex items-center justify-end gap-1 text-[10px] ${isMine ? "text-indigo-200" : "text-gray-500"
+                      }`}
                   >
                     <span>
                       {new Date(msg.createdAt).toLocaleTimeString("en-IN", {

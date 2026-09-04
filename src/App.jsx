@@ -13,6 +13,7 @@ import ViewProfile from "./components/ViewProfile";
 import EditProfile from "./components/EditProfile";
 import Settings from "./components/Settings";
 import Chat from "./components/Chat";
+import VideoCall from "./components/VideoCall";
 
 function App() {
   return (
@@ -32,7 +33,8 @@ function App() {
               <Route path="/profile/edit" element={<EditProfile />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/chat/:targetUserId" element={<Chat />} />
-            </Route>
+
+            </Route><Route path="/videoCall/:targetUserId" element={<VideoCall />} />
           </Routes>
         </BrowserRouter>
       </Provider>

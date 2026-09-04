@@ -1,0 +1,46 @@
+7:59:05 pm [vite] (client) [Unhandled error] TypeError: Cannot read properties of null (reading '_id')
+ > VideoCall src/components/VideoCall.jsx:291:29
+    289 |        socketRef.current.disconnect();
+    290 |      };
+    291 |    }, [targetUserId, userData._id]);
+        |                               ^
+    292 |  
+    293 |    useEffect(() => {
+ > Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:25904:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:7662:21
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:10166:18
+ > beginWork node_modules/react-dom/cjs/react-dom-client.development.js:11778:17
+ > runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:871:29
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:17641:21
+ > workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:17469:40
+ > renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:17450:10
+ > performWorkOnRoot node_modules/react-dom/cjs/react-dom-client.development.js:16583:34
+
+7:59:05 pm [vite] (client) [console.warn] An error occurred in the <VideoCall> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+
+7:59:05 pm [vite] (client) [Unhandled error] TypeError: Cannot read properties of null (reading '_id')
+ > VideoCall src/components/VideoCall.jsx:291:29
+    289 |        socketRef.current.disconnect();
+    290 |      };
+    291 |    }, [targetUserId, userData._id]);
+        |                               ^
+    292 |  
+    293 |    useEffect(() => {
+ > Object.react_stack_bottom_frame node_modules/react-dom/cjs/react-dom-client.development.js:25904:19
+ > renderWithHooks node_modules/react-dom/cjs/react-dom-client.development.js:7662:21
+ > updateFunctionComponent node_modules/react-dom/cjs/react-dom-client.development.js:10166:18
+ > beginWork node_modules/react-dom/cjs/react-dom-client.development.js:11778:17
+ > runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:871:29
+ > performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:17641:21
+ > workLoopSync node_modules/react-dom/cjs/react-dom-client.development.js:17469:40
+ > renderRootSync node_modules/react-dom/cjs/react-dom-client.development.js:17450:10
+ > performWorkOnRoot node_modules/react-dom/cjs/react-dom-client.development.js:16583:34
+
+7:59:05 pm [vite] (client) [console.warn] An error occurred in the <VideoCall> component.
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://react.dev/link/error-boundaries to learn more about error boundaries.
+

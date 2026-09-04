@@ -70,7 +70,7 @@ const Connections = () => {
                 {/* Profile */}
                 <div className="flex items-center gap-4">
                   <img
-                    src={connection.photoUrl || null}
+                    src={connection?.photoUrl || "/profileholder.png "}
                     alt={`${connection.firstName} ${connection.lastName}`}
                     className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500/50"
                   />
