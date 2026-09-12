@@ -22,7 +22,7 @@ const Login = () => {
         },
       );
       dispatch(addUser(res.data));
-      navigate("/feed");
+      navigate("/");
     } catch (err) {
       setError(true);
       console.error(err);
@@ -30,7 +30,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (userData) navigate("/feed");
+    if (userData) navigate("/");
   }, []);
 
   return (

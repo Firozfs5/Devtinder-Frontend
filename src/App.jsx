@@ -14,6 +14,8 @@ import EditProfile from "./components/EditProfile";
 import Settings from "./components/Settings";
 import Chat from "./components/Chat";
 import VideoCall from "./components/VideoCall";
+import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
   return (
@@ -21,20 +23,29 @@ function App() {
       <Provider store={appStore}>
         <BrowserRouter basename="/">
           <Routes>
-            <Route path="/" element={<Body />}>
-              <Route path="/feed" element={<Feed />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/connections" element={<Connections />} />
-              <Route path="/requests" element={<Requests />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/password" element={<ChangePassword />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/profile/:userId" element={<ViewProfile />} />
-              <Route path="/profile/edit" element={<EditProfile />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/chat/:targetUserId" element={<Chat />} />
+            {/* Public Route */}
 
-            </Route><Route path="/videoCall/:targetUserId" element={<VideoCall />} />
+            <Route element={<PublicRoute />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+            </Route>
+
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Body />}>
+                <Route index element={<Feed />} />
+                <Route path="connections" element={<Connections />} />
+                <Route path="requests" element={<Requests />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="profile/:userId" element={<ViewProfile />} />
+                <Route path="/password" element={<ChangePassword />} />
+                <Route path="profile/edit" element={<EditProfile />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="chat/:targetUserId" element={<Chat />} />
+              </Route>
+
+              <Route path="/videoCall/:targetUserId" element={<VideoCall />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </Provider>
@@ -43,3 +54,6 @@ function App() {
 }
 
 export default App;
+{
+  /* <Route path="/login" element={<Login />} /><Route path="/signup" element={<Signup />} /> */
+}

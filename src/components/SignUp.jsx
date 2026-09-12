@@ -16,7 +16,7 @@ function Signup() {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -28,16 +28,14 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     setError("");
     setSuccess("");
 
     try {
-      const res = await axios.post(BASE_URL + "/signup", formData, {
+      await axios.post(BASE_URL + "/signup", formData, {
         withCredentials: true,
       });
-
-      console.log(res.data);
 
       setSuccess("Account created successfully!");
 
@@ -45,14 +43,16 @@ function Signup() {
         navigate("/login");
       }, 1500);
     } catch (err) {
-      console.error(err);
-
-      setError(err.response?.data || "Something went wrong. Please try again.");
+      setError(
+        err.response?.data?.error || "Something went wrong. Please try again.",
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (userData) navigate("/feed");
+    if (userData) navigate("/");
   }, []);
 
   return (
@@ -156,9 +156,10 @@ function Signup() {
           {/* Submit */}
           <button
             type="submit"
+            disabled={loading}
             className="w-full rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 py-3 font-semibold text-white transition hover:opacity-90"
           >
-            Create Account
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 

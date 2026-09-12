@@ -145,20 +145,162 @@ const Chat = () => {
   // UI
   // --------------------------------------------------
 
+  // return (
+  //   <div className="mx-auto flex h-[calc(100vh-76px)] max-w-3xl flex-col overflow-hidden bg-[#1D232A]">
+  //     {/* ==================================================
+  //         HEADER
+  //     ================================================== */}
+
+  //     <div className="flex items-center justify-between border-b border-gray-700/50 px-4 py-4">
+  //       {/* User */}
+
+  //       <div className="flex items-center gap-3">
+  //         {/* Avatar */}
+
+  //         <div className="relative">
+  //           <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-indigo-500 font-medium text-white">
+  //             {touserData?.photoUrl ? (
+  //               <img
+  //                 src={touserData.photoUrl}
+  //                 alt={touserData.firstName}
+  //                 className="h-full w-full object-cover"
+  //               />
+  //             ) : (
+  //               touserData?.firstName?.charAt(0).toUpperCase()
+  //             )}
+  //           </div>
+
+  //           {/* Online indicator */}
+
+  //           <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#1b222b] bg-green-500" />
+  //         </div>
+
+  //         {/* User information */}
+
+  //         <div>
+  //           <h2 className="text-sm font-semibold text-white">
+  //             {touserData.firstName} {touserData.lastName}
+  //           </h2>
+
+  //           <p className="text-xs text-gray-400">Online</p>
+  //         </div>
+  //       </div>
+
+  //       {/* Video button */}
+
+  //       <button
+  //         type="button"
+  //         onClick={() => navigate("/videoCall/" + targetUserId)}
+  //         className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-800 hover:text-white"
+  //       >
+  //         <Video size={19} />
+  //       </button>
+  //     </div>
+
+  //     {/* ==================================================
+  //         MESSAGES
+  //     ================================================== */}
+
+  //     <div className="flex-1 overflow-y-auto px-4 py-6">
+  //       <div className="flex flex-col gap-3">
+  //         {chatData?.messages?.map((msg) => {
+  //           const isMine = msg?.senderId?.toString() === userId?.toString();
+
+  //           return (
+  //             <div
+  //               key={msg?._id}
+  //               className={`flex ${isMine ? "justify-end" : "justify-start"}`}
+  //             >
+  //               {/* Message bubble */}
+
+  //               <div
+  //                 className={`max-w-[75%] px-4 py-2.5 ${isMine
+  //                   ? "rounded-2xl rounded-br-md bg-indigo-600 text-white"
+  //                   : "rounded-2xl rounded-bl-md bg-gray-800 text-gray-200"
+  //                   }`}
+  //               >
+  //                 {/* Message text */}
+
+  //                 <p className="break-words text-sm leading-relaxed">
+  //                   {msg.text}
+  //                 </p>
+
+  //                 {/* Time + status */}
+
+  //                 <div
+  //                   className={`mt-1.5 flex items-center justify-end gap-1 text-[10px] ${isMine ? "text-indigo-200" : "text-gray-500"
+  //                     }`}
+  //                 >
+  //                   <span>
+  //                     {new Date(msg.createdAt).toLocaleTimeString("en-IN", {
+  //                       hour: "2-digit",
+  //                       minute: "2-digit",
+  //                     })}
+  //                   </span>
+
+  //                   {isMine && <CheckCheck size={12} />}
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           );
+  //         })}
+
+  //         {/* Scroll target */}
+
+  //         <div ref={messagesEndRef} />
+  //       </div>
+  //     </div>
+
+  //     {/* ==================================================
+  //         MESSAGE INPUT
+  //     ================================================== */}
+
+  //     <form
+  //       onSubmit={handleSend}
+  //       className="flex items-center gap-2 border-t border-gray-700/50 bg-[#1b222b] px-4 py-3"
+  //     >
+  //       {/* Attachment */}
+
+  //       <button
+  //         type="button"
+  //         className="rounded-lg p-2.5 text-gray-400 transition hover:bg-gray-800 hover:text-white"
+  //       >
+  //         <Paperclip size={19} />
+  //       </button>
+
+  //       {/* Input */}
+
+  //       <input
+  //         type="text"
+  //         value={message}
+  //         onChange={(e) => setMessage(e.target.value)}
+  //         placeholder={`Message ${touserData.firstName}...`}
+  //         className="flex-1 rounded-xl border border-gray-700 bg-gray-800/70 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+  //       />
+
+  //       {/* Send */}
+
+  //       <button
+  //         type="submit"
+  //         disabled={!message.trim()}
+  //         className="rounded-xl bg-indigo-600 p-2.5 text-white transition hover:bg-indigo-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+  //       >
+  //         <Send size={18} />
+  //       </button>
+  //     </form>
+  //   </div>
+  // );
+
   return (
-    <div className="mx-auto flex h-[calc(100vh-76px)] max-w-3xl flex-col overflow-hidden bg-[#1D232A]">
-      {/* ==================================================
-          HEADER
-      ================================================== */}
+    <div className="mx-auto flex h-[calc(100dvh-76px)] w-full max-w-3xl flex-col overflow-hidden bg-[#1D232A]">
+      {/* ========================= HEADER ========================= */}
 
-      <div className="flex items-center justify-between border-b border-gray-700/50 px-4 py-4">
-        {/* User */}
-
-        <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-20 flex shrink-0 items-center justify-between border-b border-gray-700/50 bg-[#1D232A]/95 px-3 py-3 backdrop-blur-md sm:px-4 sm:py-4">
+        {/* User info */}
+        <div className="flex min-w-0 items-center gap-3">
           {/* Avatar */}
-
-          <div className="relative">
-            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-indigo-500 font-medium text-white">
+          <div className="relative shrink-0">
+            <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-indigo-500 text-sm font-semibold text-white sm:h-11 sm:w-11">
               {touserData?.photoUrl ? (
                 <img
                   src={touserData.photoUrl}
@@ -171,65 +313,64 @@ const Chat = () => {
             </div>
 
             {/* Online indicator */}
-
-            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#1b222b] bg-green-500" />
+            <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#1D232A] bg-green-500" />
           </div>
 
-          {/* User information */}
-
-          <div>
-            <h2 className="text-sm font-semibold text-white">
+          {/* Name + status */}
+          <div className="min-w-0">
+            <h2 className="truncate text-sm font-semibold text-white sm:text-[15px]">
               {touserData.firstName} {touserData.lastName}
             </h2>
 
-            <p className="text-xs text-gray-400">Online</p>
+            <div className="mt-0.5 flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+              <p className="text-xs text-gray-400">Online</p>
+            </div>
           </div>
         </div>
 
         {/* Video button */}
-
         <button
           type="button"
           onClick={() => navigate("/videoCall/" + targetUserId)}
-          className="rounded-lg p-2 text-gray-400 transition hover:bg-gray-800 hover:text-white"
+          className="ml-2 shrink-0 rounded-xl p-2.5 text-gray-400 transition active:scale-95 hover:bg-gray-800 hover:text-white"
+          aria-label="Start video call"
         >
-          <Video size={19} />
+          <Video size={20} />
         </button>
-      </div>
+      </header>
 
-      {/* ==================================================
-          MESSAGES
-      ================================================== */}
+      {/* ========================= MESSAGES ========================= */}
 
-      <div className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="flex flex-col gap-3">
+      <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-4 sm:px-4 sm:py-6">
+        <div className="flex flex-col gap-2.5 sm:gap-3">
           {chatData?.messages?.map((msg) => {
             const isMine = msg?.senderId?.toString() === userId?.toString();
 
             return (
               <div
                 key={msg?._id}
-                className={`flex ${isMine ? "justify-end" : "justify-start"}`}
+                className={`flex w-full ${
+                  isMine ? "justify-end" : "justify-start"
+                }`}
               >
-                {/* Message bubble */}
-
                 <div
-                  className={`max-w-[75%] px-4 py-2.5 ${isMine
-                    ? "rounded-2xl rounded-br-md bg-indigo-600 text-white"
-                    : "rounded-2xl rounded-bl-md bg-gray-800 text-gray-200"
-                    }`}
+                  className={`max-w-[85%] px-3.5 py-2.5 sm:max-w-[75%] sm:px-4 ${
+                    isMine
+                      ? "rounded-2xl rounded-br-md bg-indigo-600 text-white"
+                      : "rounded-2xl rounded-bl-md bg-gray-800 text-gray-200"
+                  }`}
                 >
-                  {/* Message text */}
-
-                  <p className="break-words text-sm leading-relaxed">
+                  {/* Message */}
+                  <p className="wrap-break-word whitespace-pre-wrap text-[13px] leading-relaxed sm:text-sm">
                     {msg.text}
                   </p>
 
                   {/* Time + status */}
-
                   <div
-                    className={`mt-1.5 flex items-center justify-end gap-1 text-[10px] ${isMine ? "text-indigo-200" : "text-gray-500"
-                      }`}
+                    className={`mt-1.5 flex items-center justify-end gap-1 text-[9px] sm:text-[10px] ${
+                      isMine ? "text-indigo-200" : "text-gray-500"
+                    }`}
                   >
                     <span>
                       {new Date(msg.createdAt).toLocaleTimeString("en-IN", {
@@ -246,48 +387,46 @@ const Chat = () => {
           })}
 
           {/* Scroll target */}
-
           <div ref={messagesEndRef} />
         </div>
-      </div>
+      </main>
 
-      {/* ==================================================
-          MESSAGE INPUT
-      ================================================== */}
+      {/* ========================= INPUT ========================= */}
 
-      <form
-        onSubmit={handleSend}
-        className="flex items-center gap-2 border-t border-gray-700/50 bg-[#1b222b] px-4 py-3"
-      >
-        {/* Attachment */}
-
-        <button
-          type="button"
-          className="rounded-lg p-2.5 text-gray-400 transition hover:bg-gray-800 hover:text-white"
+      <footer className="shrink-0 border-t border-gray-700/50 bg-[#1b222b] px-2.5 py-2.5 sm:px-4 sm:py-3">
+        <form
+          onSubmit={handleSend}
+          className="mx-auto flex w-full max-w-3xl items-center gap-2"
         >
-          <Paperclip size={19} />
-        </button>
+          {/* Attachment */}
+          <button
+            type="button"
+            className="shrink-0 rounded-xl p-2.5 text-gray-400 transition active:scale-95 hover:bg-gray-800 hover:text-white"
+            aria-label="Attach file"
+          >
+            <Paperclip size={19} />
+          </button>
 
-        {/* Input */}
+          {/* Input */}
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder={`Message ${touserData.firstName}...`}
+            className="min-w-0 flex-1 rounded-xl border border-gray-700 bg-gray-800/70 px-3.5 py-2.5 text-[13px] text-white outline-none transition placeholder:text-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 sm:px-4 sm:text-sm"
+          />
 
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder={`Message ${touserData.firstName}...`}
-          className="flex-1 rounded-xl border border-gray-700 bg-gray-800/70 px-4 py-2.5 text-sm text-white outline-none transition placeholder:text-gray-500 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
-        />
-
-        {/* Send */}
-
-        <button
-          type="submit"
-          disabled={!message.trim()}
-          className="rounded-xl bg-indigo-600 p-2.5 text-white transition hover:bg-indigo-500 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
-        >
-          <Send size={18} />
-        </button>
-      </form>
+          {/* Send */}
+          <button
+            type="submit"
+            disabled={!message.trim()}
+            className="shrink-0 rounded-xl bg-indigo-600 p-2.5 text-white transition active:scale-95 hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-40"
+            aria-label="Send message"
+          >
+            <Send size={18} />
+          </button>
+        </form>
+      </footer>
     </div>
   );
 };

@@ -1,8 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import createSocketConnection from "../config/socket";
-import peer from "../service/peer";
+import { motion } from "framer-motion";
 import {
   Mic,
   MicOff,
@@ -11,135 +10,229 @@ import {
   PhoneOff,
   Users,
   ShieldCheck,
+  Maximize2,
+  RotateCcw,
+  Grip,
 } from "lucide-react";
 
+import createSocketConnection from "../config/socket";
+import peer from "../service/peer";
+
 const VideoCall = () => {
-  const [remoteSocketId, setRemoteSocketId] = useState(null);
-  const remoteSocketIdRef = useRef(null);
-  const socketRef = useRef(null);
-  const userData = useSelector((store) => store.user);
-  const [myStream, setMyStream] = useState(null);
-  const [remoteStream, setRemoteStream] = useState(null);
   const { targetUserId } = useParams();
   const navigate = useNavigate();
+  const userData = useSelector((store) => store.user);
+
+  const [remoteSocketId, setRemoteSocketId] = useState(null);
+  const [myStream, setMyStream] = useState(null);
+  const [remoteStream, setRemoteStream] = useState(null);
+
   const [micOn, setMicOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
   const [callDuration, setCallDuration] = useState(0);
+
+  // false = remote large, true = local large
+  const [isLocalMain, setIsLocalMain] = useState(false);
+
+  // PiP position
+  const [pipPosition, setPipPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+
+  const socketRef = useRef(null);
+  const remoteSocketIdRef = useRef(null);
   const timerRef = useRef(null);
   const iceCandidateQueue = useRef([]);
 
-  // ─── CALL TIMER ──────────────────────────────
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const stageRef = useRef(null);
+
+  // =========================================================
+  // TIMER
+  // =========================================================
+
   useEffect(() => {
-    if (remoteSocketId) {
-      timerRef.current = setInterval(() => {
-        setCallDuration((prev) => prev + 1);
-      }, 1000);
+    if (!remoteSocketId) {
+      clearInterval(timerRef.current);
+      return;
     }
+
+    timerRef.current = setInterval(() => {
+      setCallDuration((prev) => prev + 1);
+    }, 1000);
+
     return () => clearInterval(timerRef.current);
   }, [remoteSocketId]);
 
   const formatTime = (seconds) => {
-    const m = Math.floor(seconds / 60)
+    const minutes = Math.floor(seconds / 60)
       .toString()
       .padStart(2, "0");
-    const s = (seconds % 60).toString().padStart(2, "0");
-    return `${m}:${s}`;
+
+    const secs = (seconds % 60).toString().padStart(2, "0");
+
+    return `${minutes}:${secs}`;
   };
 
-  // ─── WEBRTC HANDLERS ────────────────────────
+  // =========================================================
+  // MEDIA
+  // =========================================================
+
   const getMedia = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    setMyStream(stream);
-    return stream;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+
+      setMyStream(stream);
+      return stream;
+    } catch (error) {
+      console.error("Camera / microphone error:", error);
+      return null;
+    }
   };
+
+  // =========================================================
+  // WEBRTC
+  // =========================================================
 
   const handleUserCallJoined = async ({ id }) => {
-    setRemoteSocketId(id);
-    remoteSocketIdRef.current = id;
-    const stream = await getMedia();
-    stream.getTracks().forEach((track) => {
-      peer.peer.addTrack(track, stream);
-    });
-    const offer = await peer.getOffer();
-    socketRef.current.emit("offer", { offer, id });
+    try {
+      setRemoteSocketId(id);
+      remoteSocketIdRef.current = id;
+
+      const stream = await getMedia();
+      if (!stream) return;
+
+      stream.getTracks().forEach((track) => {
+        peer.peer.addTrack(track, stream);
+      });
+
+      const offer = await peer.getOffer();
+
+      socketRef.current?.emit("offer", {
+        offer,
+        id,
+      });
+    } catch (error) {
+      console.error("Call joined error:", error);
+    }
   };
 
   const handleOffer = async ({ offer, id }) => {
-    setRemoteSocketId(id);
-    remoteSocketIdRef.current = id;
-    const stream = await getMedia();
-    stream.getTracks().forEach((track) => {
-      peer.peer.addTrack(track, stream);
-    });
-    // getAnswer already sets remote description internally
-    const answer = await peer.getAnswer(offer);
-    socketRef.current.emit("answer", { answer, id });
-    // Flush any ICE candidates that arrived before remote description was set
-    await flushIceCandidateQueue();
+    try {
+      setRemoteSocketId(id);
+      remoteSocketIdRef.current = id;
+
+      const stream = await getMedia();
+      if (!stream) return;
+
+      stream.getTracks().forEach((track) => {
+        peer.peer.addTrack(track, stream);
+      });
+
+      const answer = await peer.getAnswer(offer);
+
+      socketRef.current?.emit("answer", {
+        answer,
+        id,
+      });
+
+      await flushIceCandidates();
+    } catch (error) {
+      console.error("Offer error:", error);
+    }
   };
 
   const handleAnswer = async ({ answer }) => {
-    await peer.peer.setRemoteDescription(answer);
-    // Flush any ICE candidates that arrived before remote description was set
-    await flushIceCandidateQueue();
+    try {
+      await peer.peer.setRemoteDescription(answer);
+      await flushIceCandidates();
+    } catch (error) {
+      console.error("Answer error:", error);
+    }
   };
 
-  const flushIceCandidateQueue = async () => {
+  const flushIceCandidates = async () => {
     while (iceCandidateQueue.current.length > 0) {
       const candidate = iceCandidateQueue.current.shift();
-      await peer.peer.addIceCandidate(candidate);
+
+      try {
+        await peer.peer.addIceCandidate(candidate);
+      } catch (error) {
+        console.error("Queued ICE error:", error);
+      }
     }
   };
 
   const handleIncomingIceCandidate = async ({ candidate }) => {
     if (!candidate) return;
-    // If remote description isn't set yet, queue the candidate
+
     if (!peer.peer.remoteDescription) {
       iceCandidateQueue.current.push(candidate);
-    } else {
+      return;
+    }
+
+    try {
       await peer.peer.addIceCandidate(candidate);
+    } catch (error) {
+      console.error("ICE candidate error:", error);
     }
   };
 
-  // ─── SOCKET SETUP ───────────────────────────
-  useEffect(() => {
-    socketRef.current = createSocketConnection();
+  // =========================================================
+  // SOCKET
+  // =========================================================
 
-    socketRef.current.emit("join:call", {
+  useEffect(() => {
+    if (!userData?._id || !targetUserId) return;
+
+    const socket = createSocketConnection();
+    socketRef.current = socket;
+
+    socket.emit("join:call", {
       targetUserId,
       userId: userData._id,
     });
 
-    socketRef.current.on("user:call:joined", handleUserCallJoined);
-    socketRef.current.on("offer", handleOffer);
-    socketRef.current.on("answer", handleAnswer);
-    socketRef.current.on("ice-candidate", handleIncomingIceCandidate);
+    socket.on("user:call:joined", handleUserCallJoined);
+    socket.on("offer", handleOffer);
+    socket.on("answer", handleAnswer);
+    socket.on("ice-candidate", handleIncomingIceCandidate);
 
     return () => {
-      socketRef.current.off("user:call:joined", handleUserCallJoined);
-      socketRef.current.off("offer", handleOffer);
-      socketRef.current.off("answer", handleAnswer);
-      socketRef.current.off("ice-candidate", handleIncomingIceCandidate);
-      socketRef.current.disconnect();
+      socket.off("user:call:joined", handleUserCallJoined);
+      socket.off("offer", handleOffer);
+      socket.off("answer", handleAnswer);
+      socket.off("ice-candidate", handleIncomingIceCandidate);
+      socket.disconnect();
     };
-  }, [targetUserId, userData._id]);
+  }, [targetUserId, userData?._id]);
 
-  // ─── PEER EVENTS ────────────────────────────
+  // =========================================================
+  // PEER EVENTS
+  // =========================================================
+
   useEffect(() => {
     peer.peer.ontrack = (event) => {
-      setRemoteStream(event.streams[0]);
+      const stream = event.streams?.[0];
+
+      if (stream) {
+        setRemoteStream(stream);
+      }
     };
 
     peer.peer.onicecandidate = (event) => {
-      if (event.candidate && socketRef.current) {
-        socketRef.current.emit("ice-candidate", {
-          candidate: event.candidate,
-          id: remoteSocketIdRef.current,
-        });
-      }
+      if (!event.candidate) return;
+      if (!socketRef.current) return;
+
+      socketRef.current.emit("ice-candidate", {
+        candidate: event.candidate,
+        id: remoteSocketIdRef.current,
+      });
     };
 
     return () => {
@@ -148,183 +241,474 @@ const VideoCall = () => {
     };
   }, []);
 
-  // ─── CONTROLS ───────────────────────────────
+  // =========================================================
+  // IMPORTANT:
+  // Keep BOTH VIDEO ELEMENTS MOUNTED.
+  // We only change z-index/opacity.
+  // This prevents the large-video stream from disappearing
+  // when swapping.
+  // =========================================================
+
+  useEffect(() => {
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = myStream || null;
+    }
+  }, [myStream]);
+
+  useEffect(() => {
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = remoteStream || null;
+    }
+  }, [remoteStream]);
+
+  // =========================================================
+  // CONTROLS
+  // =========================================================
+
   const toggleMic = () => {
     if (!myStream) return;
+
     const audioTrack = myStream.getAudioTracks()[0];
-    if (audioTrack) {
-      audioTrack.enabled = !audioTrack.enabled;
-      setMicOn(audioTrack.enabled);
-    }
+
+    if (!audioTrack) return;
+
+    audioTrack.enabled = !audioTrack.enabled;
+    setMicOn(audioTrack.enabled);
   };
 
   const toggleVideo = () => {
     if (!myStream) return;
+
     const videoTrack = myStream.getVideoTracks()[0];
-    if (videoTrack) {
-      videoTrack.enabled = !videoTrack.enabled;
-      setVideoOn(videoTrack.enabled);
+
+    if (!videoTrack) return;
+
+    videoTrack.enabled = !videoTrack.enabled;
+    setVideoOn(videoTrack.enabled);
+  };
+
+  // =========================================================
+  // SWAP
+  // =========================================================
+
+  const swapVideos = () => {
+    if (!myStream || !remoteStream) return;
+
+    setIsLocalMain((prev) => !prev);
+  };
+
+  // =========================================================
+  // FULLSCREEN
+  // =========================================================
+
+  const handleFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        return;
+      }
+
+      await stageRef.current?.requestFullscreen();
+    } catch (error) {
+      console.error("Fullscreen error:", error);
     }
   };
 
+  // =========================================================
+  // RESET PIP
+  // =========================================================
+
+  const resetPip = () => {
+    setPipPosition({
+      x: 0,
+      y: 0,
+    });
+  };
+
+  // =========================================================
+  // END CALL
+  // =========================================================
+
   const endCall = useCallback(() => {
+    clearInterval(timerRef.current);
+
     if (myStream) {
       myStream.getTracks().forEach((track) => track.stop());
     }
-    clearInterval(timerRef.current);
-    peer.peer.close();
+
+    try {
+      peer.peer.close();
+    } catch (error) {
+      console.error("Peer close error:", error);
+    }
+
     socketRef.current?.disconnect();
 
-    // Navigate back and force reload so previous page re-fetches data
     navigate(-1);
+
     setTimeout(() => {
       window.location.reload();
     }, 100);
   }, [myStream, navigate]);
 
-  // ─── RENDER ─────────────────────────────────
-  return (
-    <div className="fixed inset-0 bg-[#09090b] text-white flex flex-col overflow-hidden">
+  // =========================================================
+  // RENDER
+  // =========================================================
 
-      {/* ═══════ HEADER ═══════ */}
-      <header className="flex-shrink-0 h-14 sm:h-16 px-4 sm:px-6 border-b border-white/[0.06] bg-[#0f0f12]/70 backdrop-blur-xl flex items-center justify-between z-10">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/25">
-            <Video size={16} />
+  return (
+    <div className="fixed inset-0 flex flex-col overflow-hidden bg-[#060608] text-white">
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+
+      <motion.header
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="z-50 flex h-14 shrink-0 items-center justify-between border-b border-white/[0.07] bg-[#0b0b0f]/90 px-3 backdrop-blur-2xl sm:h-16 sm:px-6"
+      >
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/20">
+            <Video size={17} />
           </div>
-          <div>
-            <h1 className="font-semibold text-sm leading-tight">Video Call</h1>
-            <div className="flex items-center gap-1.5 text-[11px] text-gray-400">
+
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <h1 className="text-sm font-semibold">Video Call</h1>
+
+              {remoteSocketId && (
+                <span className="hidden rounded-full bg-emerald-400/10 px-2 py-0.5 text-[9px] font-semibold tracking-wide text-emerald-400 sm:block">
+                  LIVE
+                </span>
+              )}
+            </div>
+
+            <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-gray-400 sm:text-[11px]">
               <span
-                className={`w-1.5 h-1.5 rounded-full ${
+                className={`h-1.5 w-1.5 rounded-full ${
                   remoteSocketId
-                    ? "bg-emerald-400 shadow-sm shadow-emerald-400/50"
-                    : "bg-yellow-400 animate-pulse"
+                    ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]"
+                    : "animate-pulse bg-amber-400"
                 }`}
               />
-              {remoteSocketId
-                ? `Connected · ${formatTime(callDuration)}`
-                : "Waiting..."}
+
+              <span>
+                {remoteSocketId
+                  ? `Connected · ${formatTime(callDuration)}`
+                  : "Waiting for connection"}
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-gray-500">
-          <ShieldCheck size={13} />
-          <span>Encrypted</span>
+        <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-[10px] text-gray-500 sm:flex">
+            <ShieldCheck size={13} />
+            Encrypted
+          </div>
+
+          <div
+            className={`h-2 w-2 rounded-full ${
+              remoteSocketId ? "bg-emerald-400" : "bg-amber-400"
+            }`}
+          />
         </div>
-      </header>
+      </motion.header>
 
-      {/* ═══════ VIDEO AREA ═══════ */}
-      <main className="flex-1 relative flex items-center justify-center p-2 sm:p-4 md:p-6 min-h-0">
+      {/* =====================================================
+          VIDEO STAGE
+      ===================================================== */}
 
-        {/* REMOTE VIDEO */}
-        <div className="relative w-full h-full max-w-6xl rounded-xl sm:rounded-2xl overflow-hidden bg-[#111114] border border-white/[0.06]">
+      <main
+        ref={stageRef}
+        className="relative min-h-0 flex-1 p-1.5 sm:p-3 md:p-5"
+      >
+        {/* VIDEO CARD */}
 
-          {remoteStream ? (
+        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[#101014] shadow-[0_25px_80px_rgba(0,0,0,0.55)] sm:rounded-3xl">
+          {/* =================================================
+              REMOTE VIDEO
+          ================================================= */}
+
+          {remoteStream && (
             <video
-              className="w-full h-full object-cover"
+              ref={remoteVideoRef}
               autoPlay
               playsInline
-              ref={(video) => {
-                if (video) video.srcObject = remoteStream;
-              }}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                !isLocalMain ? "z-10 opacity-100" : "z-0 opacity-0"
+              }`}
             />
-          ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-blue-500/20 to-indigo-600/20 border border-blue-500/20 flex items-center justify-center mb-4">
-                <Users size={28} className="text-blue-400" />
-              </div>
-              <h2 className="text-base sm:text-lg font-semibold text-center">
-                Waiting for the other person
-              </h2>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1.5 text-center">
-                They'll appear here when they join
-              </p>
-              <div className="flex gap-1 mt-4">
-                <span className="w-1.5 h-1.5 bg-blue-400/60 rounded-full animate-bounce" />
-                <span className="w-1.5 h-1.5 bg-blue-400/60 rounded-full animate-bounce [animation-delay:150ms]" />
-                <span className="w-1.5 h-1.5 bg-blue-400/60 rounded-full animate-bounce [animation-delay:300ms]" />
-              </div>
-            </div>
           )}
 
-          {/* Remote name tag */}
-          {remoteStream && (
-            <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 px-2.5 py-1.5 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-xs sm:text-sm">
-              Remote User
-            </div>
-          )}
-        </div>
+          {/* =================================================
+              LOCAL VIDEO
+          ================================================= */}
 
-        {/* LOCAL VIDEO (PiP) */}
-        {myStream && (
-          <div className="absolute right-3 bottom-20 sm:right-5 sm:bottom-24 md:right-8 md:bottom-28 w-24 sm:w-36 md:w-48 aspect-video rounded-lg sm:rounded-xl overflow-hidden border border-white/15 shadow-2xl shadow-black/60 bg-black z-10">
+          {myStream && (
             <video
-              className="w-full h-full object-cover"
+              ref={localVideoRef}
               autoPlay
               playsInline
               muted
-              ref={(video) => {
-                if (video) video.srcObject = myStream;
-              }}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
+                isLocalMain ? "z-10 opacity-100" : "z-0 opacity-0"
+              }`}
             />
-            <div className="absolute bottom-1 left-1 sm:bottom-1.5 sm:left-1.5 px-1.5 py-0.5 rounded bg-black/60 backdrop-blur text-[9px] sm:text-[10px] text-gray-300">
-              You
-            </div>
-            {!videoOn && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-900/95">
-                <VideoOff size={20} className="text-gray-500" />
+          )}
+
+          {/* =================================================
+              WAITING STATE
+          ================================================= */}
+
+          {!remoteStream && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#101014] px-6">
+              <motion.div
+                animate={{
+                  scale: [1, 1.05, 1],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+                className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-indigo-400/20 bg-indigo-500/10"
+              >
+                <div className="absolute inset-0 animate-ping rounded-full border border-indigo-400/10" />
+
+                <Users size={30} className="text-indigo-300" />
+              </motion.div>
+
+              <h2 className="text-center text-base font-semibold sm:text-lg">
+                Waiting for the other person
+              </h2>
+
+              <p className="mt-2 max-w-sm text-center text-xs leading-relaxed text-gray-500 sm:text-sm">
+                Their video will appear here automatically when they join the
+                call.
+              </p>
+
+              <div className="mt-5 flex gap-1.5">
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400 [animation-delay:150ms]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400 [animation-delay:300ms]" />
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          )}
+
+          {/* =================================================
+              CAMERA OFF
+          ================================================= */}
+
+          {isLocalMain && myStream && !videoOn && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#111115]">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/[0.05]">
+                <VideoOff size={26} className="text-gray-500" />
+              </div>
+
+              <p className="mt-3 text-sm text-gray-500">Your camera is off</p>
+            </div>
+          )}
+
+          {/* =================================================
+              GRADIENTS
+          ================================================= */}
+
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-25 h-24 bg-gradient-to-b from-black/35 to-transparent" />
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-25 h-40 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+
+          {/* =================================================
+              MAIN LABEL
+          ================================================= */}
+
+          {(remoteStream || isLocalMain) && (
+            <div className="absolute bottom-4 left-4 z-30 flex items-center gap-2 rounded-xl border border-white/10 bg-black/40 px-3 py-1.5 text-xs backdrop-blur-xl sm:bottom-5 sm:left-5 sm:px-3.5 sm:py-2 sm:text-sm">
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${
+                  isLocalMain ? "bg-indigo-400" : "bg-emerald-400"
+                }`}
+              />
+
+              {isLocalMain ? "You" : "Remote User"}
+            </div>
+          )}
+
+          {/* =================================================
+              FULLSCREEN
+          ================================================= */}
+
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            type="button"
+            onClick={handleFullscreen}
+            className="absolute right-3 top-3 z-30 flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-black/40 text-gray-300 backdrop-blur-xl transition hover:bg-black/60 hover:text-white sm:right-5 sm:top-5"
+            title="Fullscreen"
+          >
+            <Maximize2 size={16} />
+          </motion.button>
+
+          {/* =================================================
+              PIP
+          ================================================= */}
+
+          {myStream && remoteStream && (
+            <motion.div
+              drag
+              dragMomentum={false}
+              dragElastic={0.08}
+              dragConstraints={stageRef}
+              animate={{
+                x: pipPosition.x,
+                y: pipPosition.y,
+              }}
+              whileHover={{
+                scale: 1.03,
+              }}
+              whileTap={{
+                scale: 0.97,
+              }}
+              onTap={swapVideos}
+              className="group absolute bottom-4 right-3 z-40 aspect-video w-[120px] cursor-grab overflow-hidden rounded-2xl border border-white/20 bg-black shadow-2xl shadow-black/70 active:cursor-grabbing sm:bottom-7 sm:right-7 sm:w-44 md:w-52"
+            >
+              {/* Preview is always the opposite stream */}
+
+              {!isLocalMain ? (
+                <video
+                  autoPlay
+                  playsInline
+                  muted
+                  className="h-full w-full object-cover"
+                  ref={(video) => {
+                    if (video) {
+                      video.srcObject = myStream;
+                    }
+                  }}
+                />
+              ) : (
+                <video
+                  autoPlay
+                  playsInline
+                  className="h-full w-full object-cover"
+                  ref={(video) => {
+                    if (video) {
+                      video.srcObject = remoteStream;
+                    }
+                  }}
+                />
+              )}
+
+              {/* Preview gradient */}
+
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-black/80 to-transparent" />
+
+              {/* Drag handle */}
+
+              <div className="absolute left-2 top-2 flex h-6 w-6 items-center justify-center rounded-lg bg-black/50 text-white/70 backdrop-blur-md">
+                <Grip size={12} />
+              </div>
+
+              {/* Swap icon */}
+
+              <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/50 text-[11px] text-white backdrop-blur-md">
+                ↔
+              </div>
+
+              {/* Name */}
+
+              <div className="absolute bottom-2 left-2 rounded-md bg-black/50 px-1.5 py-0.5 text-[9px] text-gray-200 backdrop-blur-md sm:text-[10px]">
+                {isLocalMain ? "Remote" : "You"}
+              </div>
+
+              {/* Local camera off */}
+
+              {!isLocalMain && !videoOn && (
+                <div className="absolute inset-0 flex items-center justify-center bg-[#151519]/95">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.05]">
+                    <VideoOff size={17} className="text-gray-500" />
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </div>
       </main>
 
-      {/* ═══════ CONTROLS BAR ═══════ */}
-      <div className="flex-shrink-0 pb-[env(safe-area-inset-bottom,16px)] pt-3 px-4">
-        <div className="flex items-center justify-center gap-3 sm:gap-4">
+      {/* =====================================================
+          CONTROLS
+      ===================================================== */}
 
-          {/* Mic */}
-          <button
+      <motion.footer
+        initial={{ y: 25, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="z-50 shrink-0 px-3 pb-[max(10px,env(safe-area-inset-bottom))] pt-2 sm:px-4 sm:pt-3"
+      >
+        <div className="mx-auto flex w-fit items-center gap-2 rounded-2xl border border-white/[0.08] bg-[#101014]/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-2xl sm:gap-2.5 sm:rounded-3xl sm:p-2.5">
+          {/* MIC */}
+
+          <motion.button
+            whileTap={{ scale: 0.88 }}
+            type="button"
             onClick={toggleMic}
-            className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90 ${
+            className={`flex h-11 w-11 items-center justify-center rounded-xl transition sm:h-12 sm:w-12 sm:rounded-2xl ${
               micOn
-                ? "bg-white/10 hover:bg-white/15 text-white"
-                : "bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                ? "bg-white/[0.07] text-white hover:bg-white/[0.12]"
+                : "bg-red-500/15 text-red-400 hover:bg-red-500/25"
             }`}
             title={micOn ? "Mute" : "Unmute"}
           >
             {micOn ? <Mic size={18} /> : <MicOff size={18} />}
-          </button>
+          </motion.button>
 
-          {/* Camera */}
-          <button
+          {/* CAMERA */}
+
+          <motion.button
+            whileTap={{ scale: 0.88 }}
+            type="button"
             onClick={toggleVideo}
-            className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90 ${
+            className={`flex h-11 w-11 items-center justify-center rounded-xl transition sm:h-12 sm:w-12 sm:rounded-2xl ${
               videoOn
-                ? "bg-white/10 hover:bg-white/15 text-white"
-                : "bg-red-500/20 text-red-400 hover:bg-red-500/30"
+                ? "bg-white/[0.07] text-white hover:bg-white/[0.12]"
+                : "bg-red-500/15 text-red-400 hover:bg-red-500/25"
             }`}
             title={videoOn ? "Camera off" : "Camera on"}
           >
             {videoOn ? <Video size={18} /> : <VideoOff size={18} />}
-          </button>
+          </motion.button>
 
-          {/* End Call */}
-          <button
+          {/* RESET */}
+
+          {myStream && remoteStream && (
+            <motion.button
+              whileTap={{
+                scale: 0.88,
+                rotate: -20,
+              }}
+              type="button"
+              onClick={resetPip}
+              className="hidden h-11 w-11 items-center justify-center rounded-xl bg-white/[0.07] text-gray-300 transition hover:bg-white/[0.12] hover:text-white sm:flex sm:h-12 sm:w-12 sm:rounded-2xl"
+              title="Reset preview position"
+            >
+              <RotateCcw size={17} />
+            </motion.button>
+          )}
+
+          {/* END */}
+
+          <motion.button
+            whileTap={{ scale: 0.88 }}
+            type="button"
             onClick={endCall}
-            className="w-14 h-11 sm:w-16 sm:h-12 rounded-full bg-red-600 hover:bg-red-500 flex items-center justify-center transition-all duration-200 active:scale-90 shadow-lg shadow-red-600/30"
+            className="flex h-11 w-14 items-center justify-center rounded-xl bg-red-600 text-white shadow-lg shadow-red-600/25 transition hover:bg-red-500 sm:h-12 sm:w-16 sm:rounded-2xl"
             title="End call"
           >
             <PhoneOff size={19} />
-          </button>
+          </motion.button>
         </div>
 
-        <p className="text-center text-[10px] text-gray-600 mt-3 pb-1">
-          DevTinder · End-to-end encrypted
-        </p>
-      </div>
+        <div className="mt-2 flex items-center justify-center gap-1.5 text-[9px] text-gray-600 sm:mt-3 sm:text-[10px]">
+          <ShieldCheck size={11} />
+          <span>DevTinder secure call</span>
+        </div>
+      </motion.footer>
     </div>
   );
 };

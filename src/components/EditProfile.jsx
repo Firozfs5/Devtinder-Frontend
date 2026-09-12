@@ -12,13 +12,15 @@ function EditProfile() {
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
-    photoUrl: user?.photoUrl || "",
+    // photoUrl: user?.photoUrl || "",
     age: user?.age || "",
     gender: user?.gender || "",
     about: user?.about || "",
     skills: user?.skills || [],
   });
-
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState(null);
   const [skillInput, setSkillInput] = useState("");
 
   const handleChange = (e) => {
@@ -55,6 +57,35 @@ function EditProfile() {
     }));
   };
 
+  const handlePhotoUpload = async () => {
+    if (!selectedPhoto) return;
+
+    try {
+      setUploadingPhoto(true);
+
+      const photoData = new FormData();
+
+      photoData.append("profilePhoto", selectedPhoto);
+
+      const res = await axios.post(BASE_URL + "/profile/photo", photoData, {
+        withCredentials: true,
+      });
+
+      dispatch(
+        addUser({
+          ...user,
+          photoUrl: res.data.imageUrl,
+        }),
+      );
+
+      setSelectedPhoto(null);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -64,8 +95,12 @@ function EditProfile() {
       });
 
       dispatch(addUser(res.data.updatedData));
+
       setToastShow(true);
-      setTimeout(() => setToastShow(false), 3000);
+
+      setTimeout(() => {
+        setToastShow(false);
+      }, 3000);
     } catch (err) {
       console.error(err);
     }
@@ -123,20 +158,43 @@ function EditProfile() {
               />
             </div>
 
-            {/* Photo URL */}
+            {/* Profile Photo */}
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-300">
-                Photo URL
+                Profile Photo
               </label>
 
               <input
-                type="text"
-                name="photoUrl"
-                value={formData.photoUrl}
-                onChange={handleChange}
-                placeholder="https://..."
-                className="w-full rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-white outline-none focus:border-indigo-500"
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+
+                  setSelectedPhoto(file);
+
+                  if (file) {
+                    setPhotoPreview(URL.createObjectURL(file));
+                  }
+                }}
+                className="w-full rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-sm text-gray-300"
               />
+
+              {selectedPhoto && (
+                <>
+                  <p className="mt-2 text-sm text-gray-400">
+                    Selected: {selectedPhoto.name}
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={handlePhotoUpload}
+                    disabled={uploadingPhoto}
+                    className="mt-3 rounded-xl bg-indigo-600 px-5 py-2 font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {uploadingPhoto ? "Uploading..." : "Upload Photo"}
+                  </button>
+                </>
+              )}
             </div>
 
             {/* Age + Gender */}
@@ -249,7 +307,12 @@ function EditProfile() {
             Live Preview
           </h2>
 
-          <UserCard user={formData} />
+          <UserCard
+            user={{
+              ...formData,
+              photoUrl: photoPreview || user?.photoUrl,
+            }}
+          />
         </div>
       </div>
       {/*toast code to show profile update */}

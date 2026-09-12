@@ -62,52 +62,56 @@ const Connections = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {connections.map((connection) => (
-              <div
-                key={connection._id}
-                className="bg-[#151a21] border border-gray-700/60 rounded-2xl p-6 hover:border-indigo-500/50 transition-all duration-300 hover:-translate-y-1"
-              >
-                {/* Profile */}
-                <div className="flex items-center gap-4">
-                  <img
-                    src={connection?.photoUrl || "/profileholder.png "}
-                    alt={`${connection.firstName} ${connection.lastName}`}
-                    className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500/50"
-                  />
+            {connections?.map((connection) => {
+              if (!connection) return;
 
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
-                      {connection.firstName} {connection.lastName}
-                    </h2>
+              return (
+                <div
+                  key={connection._id}
+                  className="bg-[#151a21] border border-gray-700/60 rounded-2xl p-6 hover:border-indigo-500/50 transition-all duration-300 hover:-translate-y-1"
+                >
+                  {/* Profile */}
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={connection?.photoUrl || "/profileholder.png "}
+                      alt={`${connection?.firstName} ${connection?.lastName}`}
+                      className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500/50"
+                    />
 
-                    <p className="text-gray-400 mt-1">
-                      {connection.age} years old
-                    </p>
+                    <div>
+                      <h2 className="text-xl font-bold text-white">
+                        {connection?.firstName} {connection?.lastName}
+                      </h2>
 
-                    <span className="badge badge-primary badge-sm mt-2">
-                      {connection.gender}
-                    </span>
+                      <p className="text-gray-400 mt-1">
+                        {connection?.age} years old
+                      </p>
+
+                      <span className="badge badge-primary badge-sm mt-2">
+                        {connection?.gender}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Buttons */}
+                  <div className="flex gap-3 mt-6">
+                    <button
+                      onClick={() => navigate(`/profile/${connection?._id}`)}
+                      className="btn btn-primary btn-sm flex-1"
+                    >
+                      View Profile
+                    </button>
+
+                    <button
+                      onClick={() => navigate(`/chat/${connection?._id}`)}
+                      className="btn btn-outline btn-sm flex-1"
+                    >
+                      Message
+                    </button>
                   </div>
                 </div>
-
-                {/* Buttons */}
-                <div className="flex gap-3 mt-6">
-                  <button
-                    onClick={() => navigate(`/profile/${connection._id}`)}
-                    className="btn btn-primary btn-sm flex-1"
-                  >
-                    View Profile
-                  </button>
-
-                  <button
-                    onClick={() => navigate(`/chat/${connection._id}`)}
-                    className="btn btn-outline btn-sm flex-1"
-                  >
-                    Message
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

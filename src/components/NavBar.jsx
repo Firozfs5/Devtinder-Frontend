@@ -42,12 +42,12 @@ const NavBar = () => {
     }`;
 
   return (
-    <header className="sticky top-0 z-50 h-[74px] border-b border-gray-800 bg-[#151a21] shadow-md">
+    <header className="sticky top-0 z-50 h-18.5 border-b border-gray-800 bg-[#151a21] shadow-md">
       <div className="relative mx-auto flex h-full max-w-7xl items-center px-6">
         {/* ================= LOGO ================= */}
         <div className="absolute left-6">
           <Link
-            to="/feed"
+            to="/"
             className="text-2xl font-extrabold tracking-tight text-white"
           >
             Dev<span className="text-indigo-400">Tinder</span>
@@ -57,7 +57,7 @@ const NavBar = () => {
         {/* ================= CENTER NAVIGATION ================= */}
         {user && (
           <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 md:flex">
-            <NavLink to="/feed" className={navLinkStyle}>
+            <NavLink to="/" className={navLinkStyle}>
               Discover
             </NavLink>
 
@@ -104,7 +104,7 @@ const NavBar = () => {
               {/* Dropdown */}
               <ul
                 tabIndex="-1"
-                className="menu dropdown-content z-[60] mt-3 w-60 rounded-2xl border border-gray-700 bg-[#151a21] p-2 shadow-2xl"
+                className="menu dropdown-content z-60 mt-3 w-60 rounded-2xl border border-gray-700 bg-[#151a21] p-2 shadow-2xl"
               >
                 {/* User info */}
                 <li className="pointer-events-none mb-2 border-b border-gray-700 pb-2">
