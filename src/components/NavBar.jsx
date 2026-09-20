@@ -11,6 +11,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import Notification from "./Notification";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
@@ -73,6 +74,7 @@ const NavBar = () => {
                 </span>
               )}
             </NavLink>
+            <Notification />
           </nav>
         )}
 

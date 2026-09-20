@@ -74,7 +74,6 @@ const Chat = () => {
 
     // Join chat room
     socket.emit("joinchat", {
-      firstName: user?.firstName,
       userId,
       targetUserId,
     });
@@ -88,6 +87,8 @@ const Chat = () => {
 
     // Cleanup
     return () => {
+      socket.emit("leaveChat", { userId, targetUserId });
+
       socket.off("messageRecieved", handleMessageReceived);
 
       socket.disconnect();

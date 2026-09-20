@@ -16,44 +16,47 @@ import Chat from "./components/Chat";
 import VideoCall from "./components/VideoCall";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
+import SocketContext from "./components/SocketProvider";
 
 function App() {
   return (
     <>
       <Provider store={appStore}>
-        <BrowserRouter basename="/">
-          <Routes>
-            {/* Public Route */}
+        <SocketContext>
+          <BrowserRouter basename="/">
+            <Routes>
+              {/* Public Route */}
 
-            <Route element={<PublicRoute />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-            </Route>
-
-            {/* Protected Routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<Body />}>
-                <Route index element={<Feed />} />
-                <Route path="connections" element={<Connections />} />
-                <Route path="requests" element={<Requests />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="profile/:userId" element={<ViewProfile />} />
-                <Route path="/password" element={<ChangePassword />} />
-                <Route path="profile/edit" element={<EditProfile />} />
-                <Route path="settings" element={<Settings />} />
-                <Route path="chat/:targetUserId" element={<Chat />} />
+              <Route element={<PublicRoute />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
               </Route>
 
-              <Route path="/videoCall/:targetUserId" element={<VideoCall />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
+              {/* Protected Routes */}
+              <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Body />}>
+                  <Route index element={<Feed />} />
+                  <Route path="connections" element={<Connections />} />
+                  <Route path="requests" element={<Requests />} />
+                  <Route path="profile" element={<Profile />} />
+                  <Route path="profile/:userId" element={<ViewProfile />} />
+                  <Route path="/password" element={<ChangePassword />} />
+                  <Route path="profile/edit" element={<EditProfile />} />
+                  <Route path="settings" element={<Settings />} />
+                  <Route path="chat/:targetUserId" element={<Chat />} />
+                </Route>
+
+                <Route
+                  path="/videoCall/:targetUserId"
+                  element={<VideoCall />}
+                />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </SocketContext>
       </Provider>
     </>
   );
 }
 
 export default App;
-{
-  /* <Route path="/login" element={<Login />} /><Route path="/signup" element={<Signup />} /> */
-}
