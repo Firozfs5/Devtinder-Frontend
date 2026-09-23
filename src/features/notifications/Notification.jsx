@@ -42,7 +42,7 @@ const Notification = () => {
   };
 
   return (
-    <div className="dropdown dropdown-end">
+    <div className="dropdown ">
       {/* ================= BELL ================= */}
       <div
         tabIndex={0}
@@ -61,7 +61,31 @@ const Notification = () => {
       {/* ================= DROPDOWN ================= */}
       <div
         tabIndex="-1"
-        className="dropdown-content z-60 mt-3 w-80 overflow-hidden rounded-2xl border border-gray-700 bg-[#151a21] shadow-2xl"
+        className="
+    dropdown-content
+    z-[60]
+    mt-3
+    w-[calc(100vw-24px)]
+    max-w-80
+    overflow-hidden
+    rounded-2xl
+    border
+    border-gray-700
+    bg-[#151a21]
+    shadow-2xl
+
+    !fixed
+    !left-1/2
+    !right-auto
+    !top-[70px]
+    !-translate-x-1/2
+
+    md:!absolute
+    md:!left-auto
+    md:!right-0
+    md:!top-full
+    md:!translate-x-0
+  "
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-gray-700 px-4 py-3">

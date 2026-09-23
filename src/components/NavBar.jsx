@@ -7,7 +7,6 @@ import {
   UserRound,
   UsersRound,
   UserRoundPlus,
-  KeyRound,
   Settings,
   LogOut,
 } from "lucide-react";
