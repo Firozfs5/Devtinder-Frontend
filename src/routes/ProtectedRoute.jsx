@@ -3,7 +3,7 @@ import axios from "axios";
 import { BASE_URL } from "../utils/constants";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../utils/userSlice";
+import { addUser } from "../features/profile/userSlice";
 const ProtectedRoute = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

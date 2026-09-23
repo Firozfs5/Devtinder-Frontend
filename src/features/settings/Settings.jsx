@@ -20,8 +20,8 @@ import {
   Check,
 } from "lucide-react";
 
-import { BASE_URL } from "../utils/constants";
-import { removeUser } from "../utils/userSlice";
+import { BASE_URL } from "../../utils/constants";
+import { removeUser } from "../profile/userSlice";
 
 // ================= SECTION HEADER =================
 

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 
-import { BASE_URL } from "../utils/constants";
-import { addFeed } from "../utils/feedSlice";
+import { BASE_URL } from "../../utils/constants";
+import { addFeed } from "./feedSlice";
 import UserCard from "./UserCard";
 
 function Feed() {

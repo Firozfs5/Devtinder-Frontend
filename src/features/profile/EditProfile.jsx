@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../utils/constants";
-import { addUser } from "../utils/userSlice";
-import UserCard from "./UserCard";
+import { BASE_URL } from "../../utils/constants";
+import { addUser } from "./userSlice";
+import UserCard from "../feed/UserCard";
 
 function EditProfile() {
   const user = useSelector((store) => store.user);

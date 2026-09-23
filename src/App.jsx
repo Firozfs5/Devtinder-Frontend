@@ -1,22 +1,22 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Body from "./components/Body";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
+import Login from "./features/auth/Login";
+import Profile from "./features/profile/Profile";
 import { Provider } from "react-redux";
-import appStore from "./utils/appStore";
-import Feed from "./components/Feed";
-import Connections from "./components/Connections";
-import Requests from "./components/Requests";
-import Signup from "./components/SignUp";
-import ChangePassword from "./components/ChangePassword";
-import ViewProfile from "./components/ViewProfile";
-import EditProfile from "./components/EditProfile";
-import Settings from "./components/Settings";
-import Chat from "./components/Chat";
-import VideoCall from "./components/VideoCall";
-import ProtectedRoute from "./components/ProtectedRoute";
-import PublicRoute from "./components/PublicRoute";
-import SocketContext from "./components/SocketProvider";
+import appStore from "./store/appStore";
+import Feed from "./features/feed/Feed";
+import Connections from "./features/connections/Connections";
+import Requests from "./features/connections/Requests";
+import Signup from "./features/auth/SignUp";
+import ChangePassword from "./features/profile/ChangePassword";
+import ViewProfile from "./features/profile/ViewProfile";
+import EditProfile from "./features/profile/EditProfile";
+import Settings from "./features/settings/Settings";
+import Chat from "./features/chat/Chat";
+import VideoCall from "./features/video/VideoCall";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import PublicRoute from "./routes/PublicRoute";
+import SocketContext from "./providers/SocketProvider";
 
 function App() {
   return (

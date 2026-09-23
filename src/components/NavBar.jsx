@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import axios from "axios";
-import { removeUser } from "../utils/userSlice";
+import { removeUser } from "../features/profile/userSlice";
 import {
   UserRound,
   UsersRound,
@@ -11,7 +11,7 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import Notification from "./Notification";
+import Notification from "../features/notifications/Notification";
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
@@ -81,6 +81,9 @@ const NavBar = () => {
         {/* ================= USER RIGHT ================= */}
         {user && (
           <div className="absolute right-6 flex items-center gap-3">
+            <div className="md:hidden">
+              <Notification />
+            </div>
             {/* Welcome */}
             <div className="hidden text-right sm:block">
               <p className="text-sm font-semibold text-white">
@@ -159,17 +162,6 @@ const NavBar = () => {
                   >
                     <UserRoundPlus size={18} strokeWidth={1.8} />
                     <span>Requests</span>
-                  </Link>
-                </li>
-
-                {/* Change Password */}
-                <li>
-                  <Link
-                    to="/password"
-                    className="flex items-center gap-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white"
-                  >
-                    <KeyRound size={18} strokeWidth={1.8} />
-                    <span>Change Password</span>
                   </Link>
                 </li>
 

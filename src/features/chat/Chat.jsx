@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Send, Video, Paperclip, CheckCheck } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import createSocketConnection from "../config/socket";
+import createSocketConnection from "../../config/socket";
 import axios from "axios";
-import { BASE_URL } from "../utils/constants";
-import { addMessage, addMessages, addParticipants } from "../utils/chatSlice";
+import { BASE_URL } from "../../utils/constants";
+import { addMessage, addMessages, addParticipants } from "./chatSlice";
 
 const Chat = () => {
   const { targetUserId } = useParams();

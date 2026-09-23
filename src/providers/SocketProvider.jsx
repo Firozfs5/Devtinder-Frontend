@@ -1,7 +1,10 @@
 import { createContext, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import createSocketConnection from "../config/socket";
-import { addNotification, setNotifications } from "../utils/notificationSlice";
+import {
+  addNotification,
+  setNotifications,
+} from "../features/notifications/notificationSlice";
 import { BASE_URL } from "../utils/constants";
 import axios from "axios";
 

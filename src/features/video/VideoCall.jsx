@@ -15,8 +15,8 @@ import {
   Grip,
 } from "lucide-react";
 
-import createSocketConnection from "../config/socket";
-import peer from "../service/peer";
+import createSocketConnection from "../../config/socket";
+import peer from "./peer";
 
 const VideoCall = () => {
   const { targetUserId } = useParams();

@@ -9,8 +9,8 @@ import {
 import { X, Heart, GripHorizontal } from "lucide-react";
 import { useDispatch } from "react-redux";
 
-import { BASE_URL } from "../utils/constants";
-import { removeUserFromFeed } from "../utils/feedSlice";
+import { BASE_URL } from "../../utils/constants";
+import { removeUserFromFeed } from "./feedSlice";
 
 function UserCard({ user }) {
   const { firstName, lastName, photoUrl, gender, age, about, skills, _id } =

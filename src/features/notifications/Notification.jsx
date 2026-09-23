@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Bell, Check, UserRound } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { BASE_URL } from "../utils/constants";
-import { markAllAsRead, markAsRead } from "../utils/notificationSlice";
+import { BASE_URL } from "../../utils/constants";
+import { markAllAsRead, markAsRead } from "./notificationSlice";
 import { useNavigate } from "react-router";
 
 const Notification = () => {
