@@ -5,4 +5,4 @@
 export const BASE_URL =
   location.hostname === "localhost"
     ? "http://localhost:3000"
-    : "https://devtiner-backend.onrender.com";
+    : "https://devora-backend-6u79.onrender.com";
