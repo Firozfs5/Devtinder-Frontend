@@ -4,15 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../profile/userSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../utils/constants";
+
 const Login = () => {
   const [emailId, setEmailId] = useState("jesus@gmail.com");
   const [password, setPassword] = useState("Jesus@123");
   const [error, setError] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector((store) => store.user);
+
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
       const res = await axios.post(
         BASE_URL + "/login",
@@ -21,6 +25,7 @@ const Login = () => {
           withCredentials: true,
         },
       );
+
       dispatch(addUser(res.data));
       navigate("/");
     } catch (err) {
@@ -34,34 +39,37 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#1c2229] flex items-center justify-center px-4">
+    <div className="flex min-h-screen items-center justify-center bg-dt-background px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-white">
-            Dev<span className="text-indigo-400">Tinder</span>
+
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-extrabold tracking-tight text-dt-text">
+            Dev<span className="text-dt-primary">Tinder</span>
           </h1>
 
-          <p className="text-gray-400 mt-2">
+          <p className="mt-2 text-sm text-dt-muted">
             Connect with developers who build amazing things.
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-[#151a21] border border-[#2a313b] rounded-2xl shadow-2xl p-8">
-          <h2 className="text-2xl font-bold text-white mb-2">
+
+        <div className="rounded-2xl border border-dt-border bg-dt-surface p-8 shadow-xl">
+          <h2 className="mb-2 text-2xl font-bold text-dt-text">
             Welcome back 👋
           </h2>
 
-          <p className="text-gray-400 text-sm mb-6">
-            Login to continue to DevTinder
+          <p className="mb-6 text-sm text-dt-muted">
+            Login to continue to Devora
           </p>
 
           <form onSubmit={handleLogin} className="space-y-5">
             {/* Email */}
+
             <div>
               <label className="label">
-                <span className="label-text text-gray-300">Email</span>
+                <span className="label-text text-dt-text">Email</span>
               </label>
 
               <input
@@ -69,20 +77,31 @@ const Login = () => {
                 placeholder="you@example.com"
                 value={emailId}
                 onChange={(e) => setEmailId(e.target.value)}
-                className="input w-full bg-[#1c2229] border-[#343c48] text-white placeholder:text-gray-500 focus:border-indigo-400 focus:outline-none"
+                className="
+                  input w-full
+                  border-dt-border
+                  bg-dt-surface-2
+                  text-dt-text
+                  placeholder:text-dt-muted
+                  focus:border-dt-primary
+                  focus:outline-none
+                  focus:ring-1
+                  focus:ring-dt-primary/30
+                "
               />
             </div>
 
             {/* Password */}
+
             <div>
-              <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between">
                 <label className="label">
-                  <span className="label-text text-gray-300">Password</span>
+                  <span className="label-text text-dt-text">Password</span>
                 </label>
 
                 <a
                   href="#"
-                  className="text-sm text-indigo-400 hover:text-indigo-300"
+                  className="text-sm font-medium text-dt-primary transition-colors hover:text-dt-primary-hover"
                 >
                   Forgot password?
                 </a>
@@ -93,27 +112,53 @@ const Login = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="input w-full bg-[#1c2229] border-[#343c48] text-white placeholder:text-gray-500 focus:border-indigo-400 focus:outline-none"
+                className="
+                  input w-full
+                  border-dt-border
+                  bg-dt-surface-2
+                  text-dt-text
+                  placeholder:text-dt-muted
+                  focus:border-dt-primary
+                  focus:outline-none
+                  focus:ring-1
+                  focus:ring-dt-primary/30
+                "
               />
             </div>
 
-            {error && <p className="text-red-500">{"Invalid credentials"}</p>}
+            {/* Error */}
+
+            {error && (
+              <p className="text-sm font-medium text-red-500">
+                Invalid credentials
+              </p>
+            )}
+
             {/* Login */}
+
             <button
               type="submit"
-              className="btn w-full bg-indigo-500 hover:bg-indigo-600 border-none text-white font-semibold"
+              className="
+                btn w-full
+                border-none
+                bg-dt-primary
+                font-semibold
+                text-white
+                transition-colors
+                hover:bg-dt-primary-hover
+              "
             >
               Login
             </button>
           </form>
 
           {/* Signup */}
-          <p className="text-center text-gray-400 text-sm mt-6">
+
+          <p className="mt-6 text-center text-sm text-dt-muted">
             Don't have an account?{" "}
             <Link
               to="/signup"
-              href="#"
-              className="text-indigo-400 hover:text-indigo-300 font-semibold"
+              className="font-semibold text-dt-primary transition-colors hover:text-dt-primary-hover"
             >
               Create one
             </Link>
@@ -121,8 +166,9 @@ const Login = () => {
         </div>
 
         {/* Bottom text */}
-        <p className="text-center text-gray-600 text-xs mt-6">
-          © {new Date().getFullYear()} DevTinder
+
+        <p className="mt-6 text-center text-xs text-dt-muted">
+          © {new Date().getFullYear()} Devora
         </p>
       </div>
     </div>

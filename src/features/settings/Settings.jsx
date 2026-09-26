@@ -22,20 +22,21 @@ import {
 
 import { BASE_URL } from "../../utils/constants";
 import { removeUser } from "../profile/userSlice";
+import ThemeToggle from "../../components/ThemeToggle";
 
 // ================= SECTION HEADER =================
 
 const SectionHeader = ({ icon: Icon, title, description }) => {
   return (
     <div className="flex items-start gap-3">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-800 text-gray-400">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-dt-surface-2 text-dt-muted">
         <Icon size={18} strokeWidth={1.8} />
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold text-white">{title}</h2>
+        <h2 className="text-lg font-semibold text-dt-text">{title}</h2>
 
-        <p className="mt-1 text-sm text-gray-500">{description}</p>
+        <p className="mt-1 text-sm text-dt-muted">{description}</p>
       </div>
     </div>
   );
@@ -45,13 +46,13 @@ const SectionHeader = ({ icon: Icon, title, description }) => {
 
 const SettingRow = ({
   icon: Icon,
-  iconStyle = "bg-indigo-500/10 text-indigo-400",
+  iconStyle = "bg-dt-primary/10 text-dt-primary",
   title,
   description,
   children,
 }) => {
   return (
-    <div className="flex items-center justify-between gap-5 border-b border-gray-800 py-5 last:border-b-0">
+    <div className="flex items-center justify-between gap-5 border-b border-dt-border py-5 last:border-b-0">
       <div className="flex min-w-0 items-start gap-4">
         <div
           className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${iconStyle}`}
@@ -60,9 +61,9 @@ const SettingRow = ({
         </div>
 
         <div className="min-w-0">
-          <p className="font-medium text-gray-200">{title}</p>
+          <p className="font-medium text-dt-text">{title}</p>
 
-          <p className="mt-1 max-w-xl text-sm leading-5 text-gray-500">
+          <p className="mt-1 max-w-xl text-sm leading-5 text-dt-muted">
             {description}
           </p>
         </div>
@@ -174,36 +175,59 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-74px)] bg-[#1c222b] px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-74px)] bg-dt-background px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         {/* ================= HEADER ================= */}
 
         <div className="mb-8">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-500/10">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-dt-primary/10">
               <SettingsIcon
                 size={22}
-                className="text-indigo-400"
+                className="text-dt-primary"
                 strokeWidth={1.8}
               />
             </div>
 
             <div>
-              <h1 className="text-2xl font-bold text-white sm:text-3xl">
+              <h1 className="text-2xl font-bold text-dt-text sm:text-3xl">
                 Settings
               </h1>
 
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-dt-muted">
                 Manage your account, privacy and preferences.
               </p>
             </div>
           </div>
         </div>
 
+        {/* ================= APPEARANCE ================= */}
+
+        <section className="mb-6 overflow-hidden rounded-2xl border border-dt-border bg-dt-surface shadow-xl">
+          <div className="border-b border-dt-border px-6 py-5">
+            <SectionHeader
+              icon={SettingsIcon}
+              title="Appearance"
+              description="Customize how Devora looks for you."
+            />
+          </div>
+
+          <div className="px-6">
+            <SettingRow
+              icon={SettingsIcon}
+              title="Theme"
+              description="Switch between light and dark appearance."
+              iconStyle="bg-dt-primary/10 text-dt-primary"
+            >
+              <ThemeToggle />
+            </SettingRow>
+          </div>
+        </section>
+
         {/* ================= PRIVACY ================= */}
 
-        <section className="mb-6 overflow-hidden rounded-2xl border border-gray-700 bg-[#151a21] shadow-xl">
-          <div className="border-b border-gray-800 px-6 py-5">
+        <section className="mb-6 overflow-hidden rounded-2xl border border-dt-border bg-dt-surface shadow-xl">
+          <div className="border-b border-dt-border px-6 py-5">
             <SectionHeader
               icon={Shield}
               title="Privacy"
@@ -214,18 +238,16 @@ const Settings = () => {
           <div className="px-6">
             {/* PROFILE VISIBILITY */}
 
-            <div className="border-b border-gray-800 py-6">
+            <div className="border-b border-dt-border py-6">
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-dt-primary/10 text-dt-primary">
                   <Eye size={19} strokeWidth={1.8} />
                 </div>
 
                 <div>
-                  <p className="font-medium text-gray-200">
-                    Profile Visibility
-                  </p>
+                  <p className="font-medium text-dt-text">Profile Visibility</p>
 
-                  <p className="mt-1 text-sm leading-5 text-gray-500">
+                  <p className="mt-1 text-sm leading-5 text-dt-muted">
                     Choose who can discover your developer profile.
                   </p>
                 </div>
@@ -241,12 +263,12 @@ const Settings = () => {
                   onClick={() => handleVisibilityChange("public")}
                   className={`relative rounded-xl border p-4 text-left transition ${
                     profileVisibility === "public"
-                      ? "border-indigo-500/60 bg-indigo-500/10"
-                      : "border-gray-700 bg-[#1c222b] hover:border-gray-600"
+                      ? "border-dt-primary/60 bg-dt-primary/10"
+                      : "border-dt-border bg-dt-surface-2 hover:border-dt-primary/40"
                   }`}
                 >
                   {profileVisibility === "public" && (
-                    <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500">
+                    <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-dt-primary">
                       <Check size={12} className="text-white" />
                     </div>
                   )}
@@ -255,14 +277,14 @@ const Settings = () => {
                     size={20}
                     className={
                       profileVisibility === "public"
-                        ? "text-indigo-400"
-                        : "text-gray-500"
+                        ? "text-dt-primary"
+                        : "text-dt-muted"
                     }
                   />
 
-                  <p className="mt-3 font-medium text-white">Public</p>
+                  <p className="mt-3 font-medium text-dt-text">Public</p>
 
-                  <p className="mt-1 text-xs leading-5 text-gray-500">
+                  <p className="mt-1 text-xs leading-5 text-dt-muted">
                     Anyone can discover your profile.
                   </p>
                 </button>
@@ -274,12 +296,12 @@ const Settings = () => {
                   onClick={() => handleVisibilityChange("private")}
                   className={`relative rounded-xl border p-4 text-left transition ${
                     profileVisibility === "private"
-                      ? "border-indigo-500/60 bg-indigo-500/10"
-                      : "border-gray-700 bg-[#1c222b] hover:border-gray-600"
+                      ? "border-dt-primary/60 bg-dt-primary/10"
+                      : "border-dt-border bg-dt-surface-2 hover:border-dt-primary/40"
                   }`}
                 >
                   {profileVisibility === "private" && (
-                    <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-indigo-500">
+                    <div className="absolute right-3 top-3 flex h-5 w-5 items-center justify-center rounded-full bg-dt-primary">
                       <Check size={12} className="text-white" />
                     </div>
                   )}
@@ -288,14 +310,14 @@ const Settings = () => {
                     size={20}
                     className={
                       profileVisibility === "private"
-                        ? "text-indigo-400"
-                        : "text-gray-500"
+                        ? "text-dt-primary"
+                        : "text-dt-muted"
                     }
                   />
 
-                  <p className="mt-3 font-medium text-white">Private</p>
+                  <p className="mt-3 font-medium text-dt-text">Private</p>
 
-                  <p className="mt-1 text-xs leading-5 text-gray-500">
+                  <p className="mt-1 text-xs leading-5 text-dt-muted">
                     Hide your profile from discovery.
                   </p>
                 </button>
@@ -306,7 +328,7 @@ const Settings = () => {
               <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center">
                 <button
                   onClick={handleSaveVisibility}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-500 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-600"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-dt-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-dt-primary-hover"
                 >
                   {saved ? (
                     <>
@@ -319,7 +341,7 @@ const Settings = () => {
                 </button>
 
                 {saved && (
-                  <p className="text-sm text-emerald-400">
+                  <p className="text-sm text-emerald-500">
                     Visibility preference saved.
                   </p>
                 )}
@@ -332,7 +354,7 @@ const Settings = () => {
               icon={UserRoundCheck}
               title="Allow Connection Requests"
               description="Allow other developers to send you connection requests."
-              iconStyle="bg-emerald-500/10 text-emerald-400"
+              iconStyle="bg-emerald-500/10 text-emerald-500"
             >
               <input
                 type="checkbox"
@@ -348,7 +370,7 @@ const Settings = () => {
               icon={CircleUserRound}
               title="Show Online Status"
               description="Let your connections know when you're online."
-              iconStyle="bg-cyan-500/10 text-cyan-400"
+              iconStyle="bg-cyan-500/10 text-cyan-500"
             >
               <input
                 type="checkbox"
@@ -362,8 +384,8 @@ const Settings = () => {
 
         {/* ================= NOTIFICATIONS ================= */}
 
-        <section className="mb-6 overflow-hidden rounded-2xl border border-gray-700 bg-[#151a21] shadow-xl">
-          <div className="border-b border-gray-800 px-6 py-5">
+        <section className="mb-6 overflow-hidden rounded-2xl border border-dt-border bg-dt-surface shadow-xl">
+          <div className="border-b border-dt-border px-6 py-5">
             <SectionHeader
               icon={Bell}
               title="Notifications"
@@ -376,7 +398,7 @@ const Settings = () => {
               icon={UserRoundCheck}
               title="Connection Requests"
               description="Get notified when someone sends you a connection request."
-              iconStyle="bg-indigo-500/10 text-indigo-400"
+              iconStyle="bg-dt-primary/10 text-dt-primary"
             >
               <input
                 type="checkbox"
@@ -392,7 +414,7 @@ const Settings = () => {
               icon={MessageCircle}
               title="Messages"
               description="Get notified when you receive a new message."
-              iconStyle="bg-purple-500/10 text-purple-400"
+              iconStyle="bg-purple-500/10 text-purple-500"
             >
               <input
                 type="checkbox"
@@ -405,8 +427,8 @@ const Settings = () => {
             <SettingRow
               icon={Mail}
               title="Email Notifications"
-              description="Receive important DevTinder updates by email."
-              iconStyle="bg-orange-500/10 text-orange-400"
+              description="Receive important Devora updates by email."
+              iconStyle="bg-orange-500/10 text-orange-500"
             >
               <input
                 type="checkbox"
@@ -420,8 +442,8 @@ const Settings = () => {
 
         {/* ================= ACCOUNT ================= */}
 
-        <section className="mb-6 overflow-hidden rounded-2xl border border-gray-700 bg-[#151a21] shadow-xl">
-          <div className="border-b border-gray-800 px-6 py-5">
+        <section className="mb-6 overflow-hidden rounded-2xl border border-dt-border bg-dt-surface shadow-xl">
+          <div className="border-b border-dt-border px-6 py-5">
             <SectionHeader
               icon={CircleUserRound}
               title="Account"
@@ -434,23 +456,23 @@ const Settings = () => {
 
             <button
               onClick={() => navigate("/password")}
-              className="flex w-full items-center justify-between gap-4 border-b border-gray-800 py-5 text-left transition hover:bg-white/[0.02]"
+              className="flex w-full items-center justify-between gap-4 border-b border-dt-border py-5 text-left transition hover:bg-dt-surface-2"
             >
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-dt-primary/10 text-dt-primary">
                   <LockKeyhole size={19} />
                 </div>
 
                 <div>
-                  <p className="font-medium text-gray-200">Change Password</p>
+                  <p className="font-medium text-dt-text">Change Password</p>
 
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-dt-muted">
                     Update your password to keep your account secure.
                   </p>
                 </div>
               </div>
 
-              <ChevronRight size={19} className="shrink-0 text-gray-600" />
+              <ChevronRight size={19} className="shrink-0 text-dt-muted" />
             </button>
 
             {/* CHANGE EMAIL */}
@@ -458,31 +480,31 @@ const Settings = () => {
             <button
               disabled={true}
               onClick={() => navigate("/change-email")}
-              className="flex w-full items-center justify-between gap-4 py-5 text-left transition hover:bg-white/[0.02]"
+              className="flex w-full items-center justify-between gap-4 py-5 text-left transition hover:bg-dt-surface-2 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-500">
                   <Mail size={19} />
                 </div>
 
                 <div>
-                  <p className="font-medium text-gray-200">Change Email</p>
+                  <p className="font-medium text-dt-text">Change Email</p>
 
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-dt-muted">
                     Update the email address linked to your account.
                   </p>
                 </div>
               </div>
 
-              <ChevronRight size={19} className="shrink-0 text-gray-600" />
+              <ChevronRight size={19} className="shrink-0 text-dt-muted" />
             </button>
           </div>
         </section>
 
         {/* ================= SESSION ================= */}
 
-        <section className="mb-6 overflow-hidden rounded-2xl border border-gray-700 bg-[#151a21] shadow-xl">
-          <div className="border-b border-gray-800 px-6 py-5">
+        <section className="mb-6 overflow-hidden rounded-2xl border border-dt-border bg-dt-surface shadow-xl">
+          <div className="border-b border-dt-border px-6 py-5">
             <SectionHeader
               icon={LogOut}
               title="Session"
@@ -493,40 +515,40 @@ const Settings = () => {
           <div className="px-6 py-5">
             <button
               onClick={handleLogout}
-              className="flex w-full items-center justify-between rounded-xl border border-gray-700 bg-[#1c222b] px-5 py-4 text-left transition hover:border-red-500/30 hover:bg-red-500/5"
+              className="flex w-full items-center justify-between rounded-xl border border-dt-border bg-dt-surface-2 px-5 py-4 text-left transition hover:border-red-500/30 hover:bg-red-500/5"
             >
               <div className="flex items-center gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-500">
                   <LogOut size={19} />
                 </div>
 
                 <div>
-                  <p className="font-medium text-gray-200">Log Out</p>
+                  <p className="font-medium text-dt-text">Log Out</p>
 
-                  <p className="mt-1 text-sm text-gray-500">
-                    Sign out of your DevTinder account.
+                  <p className="mt-1 text-sm text-dt-muted">
+                    Sign out of your Devora account.
                   </p>
                 </div>
               </div>
 
-              <ChevronRight size={19} className="text-gray-600" />
+              <ChevronRight size={19} className="text-dt-muted" />
             </button>
           </div>
         </section>
 
         {/* ================= DANGER ZONE ================= */}
 
-        <section className="overflow-hidden rounded-2xl border border-red-500/20 bg-[#151a21] shadow-xl">
-          <div className="border-b border-red-500/10 bg-red-500/3 px-6 py-5">
+        <section className="overflow-hidden rounded-2xl border border-red-500/20 bg-dt-surface shadow-xl">
+          <div className="border-b border-red-500/10 bg-red-500/5 px-6 py-5">
             <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-400">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-red-500/10 text-red-500">
                 <AlertTriangle size={18} />
               </div>
 
               <div>
-                <h2 className="font-semibold text-red-400">Danger Zone</h2>
+                <h2 className="font-semibold text-red-500">Danger Zone</h2>
 
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-dt-muted">
                   These actions are permanent and cannot be undone.
                 </p>
               </div>
@@ -539,15 +561,15 @@ const Settings = () => {
               className="flex w-full items-center justify-between rounded-xl border border-red-500/20 bg-red-500/5 px-5 py-4 text-left transition hover:border-red-500/40 hover:bg-red-500/10"
             >
               <div className="flex items-center gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-400">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-500">
                   <Trash2 size={19} />
                 </div>
 
                 <div>
-                  <p className="font-medium text-red-300">Delete Account</p>
+                  <p className="font-medium text-red-500">Delete Account</p>
 
-                  <p className="mt-1 text-sm text-gray-500">
-                    Permanently delete your DevTinder account and data.
+                  <p className="mt-1 text-sm text-dt-muted">
+                    Permanently delete your Devora account and data.
                   </p>
                 </div>
               </div>

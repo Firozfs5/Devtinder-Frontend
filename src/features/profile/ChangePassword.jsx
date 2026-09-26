@@ -98,22 +98,23 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-74px)] bg-[#1c222b] px-4 py-10">
+    <div className="min-h-[calc(100vh-74px)] bg-dt-background px-4 py-10">
       <div className="mx-auto max-w-md">
-        <div className="overflow-hidden rounded-2xl border border-gray-700 bg-[#151a21] shadow-2xl">
+        <div className="overflow-hidden rounded-2xl border border-dt-border bg-dt-surface shadow-2xl">
           {/* Header */}
-          <div className="border-b border-gray-800 px-7 py-6">
+
+          <div className="border-b border-dt-border px-7 py-6">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-indigo-500/10">
-                <LockKeyhole size={24} className="text-indigo-400" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-dt-primary/10">
+                <LockKeyhole size={24} className="text-dt-primary" />
               </div>
 
               <div>
-                <h1 className="text-2xl font-bold text-white">
+                <h1 className="text-2xl font-bold text-dt-text">
                   Change Password
                 </h1>
 
-                <p className="mt-2 text-sm leading-5 text-gray-400">
+                <p className="mt-2 text-sm leading-5 text-dt-muted">
                   Update your password to keep your account secure.
                 </p>
               </div>
@@ -121,17 +122,19 @@ const ChangePassword = () => {
           </div>
 
           {/* Form */}
+
           <form onSubmit={handleSubmit} className="space-y-5 px-7 py-7">
             {/* Current Password */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 Current Password
               </label>
 
               <div className="relative">
                 <LockKeyhole
                   size={18}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-dt-muted"
                 />
 
                 <input
@@ -140,13 +143,40 @@ const ChangePassword = () => {
                   value={formData.oldPasswordByUser}
                   onChange={handleChange}
                   placeholder="Enter current password"
-                  className="w-full rounded-xl border border-gray-700 bg-[#1c222b] py-3 pl-11 pr-12 text-white placeholder-gray-500 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-dt-border
+                    bg-dt-surface-2
+                    py-3
+                    pl-11
+                    pr-12
+                    text-dt-text
+                    placeholder:text-dt-muted
+                    outline-none
+                    transition
+                    focus:border-dt-primary
+                    focus:ring-1
+                    focus:ring-dt-primary
+                  "
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowOldPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-500 hover:bg-gray-800 hover:text-gray-300"
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    rounded-lg
+                    p-2
+                    text-dt-muted
+                    transition
+                    hover:bg-dt-surface
+                    hover:text-dt-text
+                  "
                 >
                   {showOldPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
@@ -154,15 +184,16 @@ const ChangePassword = () => {
             </div>
 
             {/* New Password */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 New Password
               </label>
 
               <div className="relative">
                 <LockKeyhole
                   size={18}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-dt-muted"
                 />
 
                 <input
@@ -171,33 +202,61 @@ const ChangePassword = () => {
                   value={formData.newPasswordByuser}
                   onChange={handleChange}
                   placeholder="Enter new password"
-                  className="w-full rounded-xl border border-gray-700 bg-[#1c222b] py-3 pl-11 pr-12 text-white placeholder-gray-500 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-dt-border
+                    bg-dt-surface-2
+                    py-3
+                    pl-11
+                    pr-12
+                    text-dt-text
+                    placeholder:text-dt-muted
+                    outline-none
+                    transition
+                    focus:border-dt-primary
+                    focus:ring-1
+                    focus:ring-dt-primary
+                  "
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowNewPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-500 hover:bg-gray-800 hover:text-gray-300"
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    rounded-lg
+                    p-2
+                    text-dt-muted
+                    transition
+                    hover:bg-dt-surface
+                    hover:text-dt-text
+                  "
                 >
                   {showNewPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
 
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-dt-muted">
                 Use a strong password with letters, numbers and symbols.
               </p>
             </div>
 
             {/* Confirm Password */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 Confirm New Password
               </label>
 
               <div className="relative">
                 <LockKeyhole
                   size={18}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-dt-muted"
                 />
 
                 <input
@@ -206,13 +265,40 @@ const ChangePassword = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Confirm new password"
-                  className="w-full rounded-xl border border-gray-700 bg-[#1c222b] py-3 pl-11 pr-12 text-white placeholder-gray-500 outline-none transition focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-dt-border
+                    bg-dt-surface-2
+                    py-3
+                    pl-11
+                    pr-12
+                    text-dt-text
+                    placeholder:text-dt-muted
+                    outline-none
+                    transition
+                    focus:border-dt-primary
+                    focus:ring-1
+                    focus:ring-dt-primary
+                  "
                 />
 
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword((prev) => !prev)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-2 text-gray-500 hover:bg-gray-800 hover:text-gray-300"
+                  className="
+                    absolute
+                    right-3
+                    top-1/2
+                    -translate-y-1/2
+                    rounded-lg
+                    p-2
+                    text-dt-muted
+                    transition
+                    hover:bg-dt-surface
+                    hover:text-dt-text
+                  "
                 >
                   {showConfirmPassword ? (
                     <EyeOff size={18} />
@@ -224,46 +310,78 @@ const ChangePassword = () => {
             </div>
 
             {/* Password Security Info */}
-            <div className="flex gap-3 rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4">
+
+            <div
+              className="
+                flex
+                gap-3
+                rounded-xl
+                border
+                border-dt-primary/20
+                bg-dt-primary/5
+                p-4
+              "
+            >
               <ShieldCheck
                 size={18}
-                className="mt-0.5 shrink-0 text-indigo-400"
+                className="mt-0.5 shrink-0 text-dt-primary"
               />
 
-              <p className="text-xs leading-5 text-gray-400">
+              <p className="text-xs leading-5 text-dt-muted">
                 Choose a strong password that you don't use on other websites.
               </p>
             </div>
 
             {/* Error */}
+
             {error && (
               <div className="flex items-start gap-3 rounded-xl border border-red-500/20 bg-red-500/10 p-4">
                 <AlertCircle
                   size={18}
-                  className="mt-0.5 shrink-0 text-red-400"
+                  className="mt-0.5 shrink-0 text-red-500"
                 />
 
-                <p className="text-sm text-red-400">{error}</p>
+                <p className="text-sm text-red-500">{error}</p>
               </div>
             )}
 
             {/* Success */}
+
             {success && (
               <div className="flex items-start gap-3 rounded-xl border border-green-500/20 bg-green-500/10 p-4">
                 <CheckCircle2
                   size={18}
-                  className="mt-0.5 shrink-0 text-green-400"
+                  className="mt-0.5 shrink-0 text-green-500"
                 />
 
-                <p className="text-sm text-green-400">{success}</p>
+                <p className="text-sm text-green-500">{success}</p>
               </div>
             )}
 
             {/* Submit */}
+
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 py-3 font-semibold text-white shadow-lg transition hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+              className="
+                flex
+                w-full
+                items-center
+                justify-center
+                gap-2
+                rounded-xl
+                bg-dt-primary
+                py-3
+                font-semibold
+                text-white
+                shadow-lg
+                shadow-dt-primary/20
+                transition
+                hover:bg-dt-primary-hover
+                active:scale-[0.98]
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+              "
             >
               <LockKeyhole size={18} />
 
@@ -272,14 +390,15 @@ const ChangePassword = () => {
           </form>
 
           {/* Footer */}
-          <div className="border-t border-gray-800 bg-[#11161c] px-7 py-5">
+
+          <div className="border-t border-dt-border bg-dt-surface-2 px-7 py-5">
             <div className="flex gap-3">
               <ShieldCheck
                 size={18}
-                className="mt-0.5 shrink-0 text-gray-500"
+                className="mt-0.5 shrink-0 text-dt-muted"
               />
 
-              <p className="text-xs leading-5 text-gray-500">
+              <p className="text-xs leading-5 text-dt-muted">
                 For your security, you'll need to enter your current password
                 before setting a new one.
               </p>

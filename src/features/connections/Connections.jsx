@@ -29,61 +29,78 @@ const Connections = () => {
 
   if (!connections) {
     return (
-      <div className="min-h-[calc(100vh-74px)] bg-[#1b222a] flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="flex min-h-[calc(100vh-74px)] items-center justify-center bg-dt-background">
+        <span className="loading loading-spinner loading-lg text-dt-primary"></span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-74px)] bg-[#1b222a] px-6 py-10">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-[calc(100vh-74px)] bg-dt-background px-6 py-10">
+      <div className="mx-auto max-w-6xl">
         {/* Heading */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Your Connections</h1>
 
-          <p className="text-gray-400 mt-2">
-            People you've connected with on DevTinder
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-dt-text">Your Connections</h1>
+
+          <p className="mt-2 text-dt-muted">
+            People you've connected with on Devora
           </p>
         </div>
 
         {/* Connections */}
+
         {connections.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24">
-            <div className="text-6xl mb-5">🤝</div>
+            <div className="mb-5 text-6xl">🤝</div>
 
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-2xl font-semibold text-dt-text">
               No connections yet
             </h2>
 
-            <p className="text-gray-400 mt-2">
+            <p className="mt-2 text-dt-muted">
               Start connecting with developers to see them here.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {connections?.map((connection) => {
               if (!connection) return;
 
               return (
                 <div
                   key={connection._id}
-                  className="bg-[#151a21] border border-gray-700/60 rounded-2xl p-6 hover:border-indigo-500/50 transition-all duration-300 hover:-translate-y-1"
+                  className="
+                    rounded-2xl
+                    border border-dt-border
+                    bg-dt-surface
+                    p-6
+                    transition-all duration-300
+                    hover:-translate-y-1
+                    hover:border-dt-primary/50
+                    hover:shadow-lg
+                  "
                 >
                   {/* Profile */}
+
                   <div className="flex items-center gap-4">
                     <img
-                      src={connection?.photoUrl || "/profileholder.png "}
+                      src={connection?.photoUrl || "/profileholder.png"}
                       alt={`${connection?.firstName} ${connection?.lastName}`}
-                      className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500/50"
+                      className="
+                        h-20 w-20
+                        rounded-full
+                        border-2 border-dt-primary/50
+                        object-cover
+                      "
                     />
 
-                    <div>
-                      <h2 className="text-xl font-bold text-white">
+                    <div className="min-w-0">
+                      <h2 className="text-xl font-bold text-dt-text">
                         {connection?.firstName} {connection?.lastName}
                       </h2>
 
-                      <p className="text-gray-400 mt-1">
+                      <p className="mt-1 text-dt-muted">
                         {connection?.age} years old
                       </p>
 
@@ -94,17 +111,34 @@ const Connections = () => {
                   </div>
 
                   {/* Buttons */}
-                  <div className="flex gap-3 mt-6">
+
+                  <div className="mt-6 flex gap-3">
                     <button
                       onClick={() => navigate(`/profile/${connection?._id}`)}
-                      className="btn btn-primary btn-sm flex-1"
+                      className="
+                        btn btn-sm
+                        flex-1
+                        border-none
+                        bg-dt-primary
+                        text-white
+                        hover:bg-dt-primary-hover
+                      "
                     >
                       View Profile
                     </button>
 
                     <button
                       onClick={() => navigate(`/chat/${connection?._id}`)}
-                      className="btn btn-outline btn-sm flex-1"
+                      className="
+                        btn btn-sm
+                        flex-1
+                        border-dt-border
+                        bg-transparent
+                        text-dt-text
+                        hover:border-dt-primary
+                        hover:bg-dt-primary/10
+                        hover:text-dt-primary
+                      "
                     >
                       Message
                     </button>

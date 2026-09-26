@@ -9,6 +9,7 @@ function EditProfile() {
   const user = useSelector((store) => store.user);
   const [toastShow, setToastShow] = useState(false);
   const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
@@ -18,6 +19,7 @@ function EditProfile() {
     about: user?.about || "",
     skills: user?.skills || [],
   });
+
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -105,32 +107,38 @@ function EditProfile() {
       console.error(err);
     }
   };
+
   if (!user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#1c222b]">
+      <div className="flex min-h-screen items-center justify-center bg-dt-background">
         <div className="flex flex-col items-center gap-4">
-          <span className="loading loading-spinner loading-lg text-indigo-500"></span>
-          <p className="text-gray-400">Loading profile...</p>
+          <span className="loading loading-spinner loading-lg text-dt-primary"></span>
+
+          <p className="text-dt-muted">Loading profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#1c222b] px-4 py-10">
+    <div className="min-h-screen bg-dt-background px-4 py-10">
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2">
-        {/* EDIT FORM */}
-        <div className="rounded-2xl border border-gray-700 bg-[#151a21] p-6 shadow-xl">
-          <h1 className="mb-2 text-2xl font-bold text-white">Edit Profile</h1>
+        {/* =================================================
+            EDIT FORM
+        ================================================= */}
 
-          <p className="mb-6 text-sm text-gray-400">
+        <div className="rounded-2xl border border-dt-border bg-dt-surface p-6 shadow-xl">
+          <h1 className="mb-2 text-2xl font-bold text-dt-text">Edit Profile</h1>
+
+          <p className="mb-6 text-sm text-dt-muted">
             Update your profile and see the changes instantly.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* First Name */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 First Name
               </label>
 
@@ -139,13 +147,29 @@ function EditProfile() {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-white outline-none focus:border-indigo-500"
+                className="
+                  w-full
+                  rounded-xl
+                  border
+                  border-dt-border
+                  bg-dt-surface-2
+                  px-4
+                  py-3
+                  text-dt-text
+                  placeholder:text-dt-muted
+                  outline-none
+                  transition
+                  focus:border-dt-primary
+                  focus:ring-1
+                  focus:ring-dt-primary
+                "
               />
             </div>
 
             {/* Last Name */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 Last Name
               </label>
 
@@ -154,13 +178,28 @@ function EditProfile() {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-white outline-none focus:border-indigo-500"
+                className="
+                  w-full
+                  rounded-xl
+                  border
+                  border-dt-border
+                  bg-dt-surface-2
+                  px-4
+                  py-3
+                  text-dt-text
+                  outline-none
+                  transition
+                  focus:border-dt-primary
+                  focus:ring-1
+                  focus:ring-dt-primary
+                "
               />
             </div>
 
             {/* Profile Photo */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 Profile Photo
               </label>
 
@@ -176,12 +215,33 @@ function EditProfile() {
                     setPhotoPreview(URL.createObjectURL(file));
                   }
                 }}
-                className="w-full rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-sm text-gray-300"
+                className="
+                  w-full
+                  cursor-pointer
+                  rounded-xl
+                  border
+                  border-dt-border
+                  bg-dt-surface-2
+                  px-4
+                  py-3
+                  text-sm
+                  text-dt-text
+                  file:mr-4
+                  file:rounded-lg
+                  file:border-0
+                  file:bg-dt-primary
+                  file:px-3
+                  file:py-2
+                  file:text-sm
+                  file:font-medium
+                  file:text-white
+                  hover:file:bg-dt-primary-hover
+                "
               />
 
               {selectedPhoto && (
                 <>
-                  <p className="mt-2 text-sm text-gray-400">
+                  <p className="mt-2 text-sm text-dt-muted">
                     Selected: {selectedPhoto.name}
                   </p>
 
@@ -189,7 +249,19 @@ function EditProfile() {
                     type="button"
                     onClick={handlePhotoUpload}
                     disabled={uploadingPhoto}
-                    className="mt-3 rounded-xl bg-indigo-600 px-5 py-2 font-semibold text-white transition hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="
+                      mt-3
+                      rounded-xl
+                      bg-dt-primary
+                      px-5
+                      py-2
+                      font-semibold
+                      text-white
+                      transition
+                      hover:bg-dt-primary-hover
+                      disabled:cursor-not-allowed
+                      disabled:opacity-50
+                    "
                   >
                     {uploadingPhoto ? "Uploading..." : "Upload Photo"}
                   </button>
@@ -198,9 +270,10 @@ function EditProfile() {
             </div>
 
             {/* Age + Gender */}
+
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-dt-text">
                   Age
                 </label>
 
@@ -209,12 +282,26 @@ function EditProfile() {
                   name="age"
                   value={formData.age}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-white outline-none focus:border-indigo-500"
+                  className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-dt-border
+                    bg-dt-surface-2
+                    px-4
+                    py-3
+                    text-dt-text
+                    outline-none
+                    transition
+                    focus:border-dt-primary
+                    focus:ring-1
+                    focus:ring-dt-primary
+                  "
                 />
               </div>
 
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-300">
+                <label className="mb-2 block text-sm font-medium text-dt-text">
                   Gender
                 </label>
 
@@ -222,7 +309,21 @@ function EditProfile() {
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-white outline-none focus:border-indigo-500"
+                  className="
+                    w-full
+                    rounded-xl
+                    border
+                    border-dt-border
+                    bg-dt-surface-2
+                    px-4
+                    py-3
+                    text-dt-text
+                    outline-none
+                    transition
+                    focus:border-dt-primary
+                    focus:ring-1
+                    focus:ring-dt-primary
+                  "
                 >
                   <option value="">Select</option>
                   <option value="male">Male</option>
@@ -233,8 +334,9 @@ function EditProfile() {
             </div>
 
             {/* About */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 About
               </label>
 
@@ -243,13 +345,29 @@ function EditProfile() {
                 value={formData.about}
                 onChange={handleChange}
                 rows="4"
-                className="w-full resize-none rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-white outline-none focus:border-indigo-500"
+                className="
+                  w-full
+                  resize-none
+                  rounded-xl
+                  border
+                  border-dt-border
+                  bg-dt-surface-2
+                  px-4
+                  py-3
+                  text-dt-text
+                  outline-none
+                  transition
+                  focus:border-dt-primary
+                  focus:ring-1
+                  focus:ring-dt-primary
+                "
               />
             </div>
 
             {/* Skills */}
+
             <div>
-              <label className="mb-2 block text-sm font-medium text-gray-300">
+              <label className="mb-2 block text-sm font-medium text-dt-text">
                 Skills
               </label>
 
@@ -265,13 +383,36 @@ function EditProfile() {
                     }
                   }}
                   placeholder="React, Node.js..."
-                  className="flex-1 rounded-xl border border-gray-700 bg-[#1c222b] px-4 py-3 text-white outline-none focus:border-indigo-500"
+                  className="
+                    flex-1
+                    rounded-xl
+                    border
+                    border-dt-border
+                    bg-dt-surface-2
+                    px-4
+                    py-3
+                    text-dt-text
+                    placeholder:text-dt-muted
+                    outline-none
+                    transition
+                    focus:border-dt-primary
+                    focus:ring-1
+                    focus:ring-dt-primary
+                  "
                 />
 
                 <button
                   type="button"
                   onClick={addSkill}
-                  className="rounded-xl bg-indigo-600 px-5 font-semibold text-white hover:bg-indigo-500"
+                  className="
+                    rounded-xl
+                    bg-dt-primary
+                    px-5
+                    font-semibold
+                    text-white
+                    transition
+                    hover:bg-dt-primary-hover
+                  "
                 >
                   Add
                 </button>
@@ -283,7 +424,20 @@ function EditProfile() {
                     type="button"
                     key={skill}
                     onClick={() => removeSkill(skill)}
-                    className="rounded-full bg-indigo-500/10 px-3 py-1 text-sm text-indigo-300 hover:bg-red-500/10 hover:text-red-400"
+                    className="
+                      rounded-full
+                      border
+                      border-dt-primary/20
+                      bg-dt-primary/10
+                      px-3
+                      py-1
+                      text-sm
+                      text-dt-primary
+                      transition
+                      hover:border-red-500/20
+                      hover:bg-red-500/10
+                      hover:text-red-500
+                    "
                   >
                     {skill} ×
                   </button>
@@ -292,18 +446,34 @@ function EditProfile() {
             </div>
 
             {/* Save */}
+
             <button
               type="submit"
-              className="w-full rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 py-3 font-semibold text-white transition hover:opacity-90"
+              className="
+                w-full
+                rounded-xl
+                bg-dt-primary
+                py-3
+                font-semibold
+                text-white
+                shadow-lg
+                shadow-dt-primary/20
+                transition
+                hover:bg-dt-primary-hover
+                active:scale-[0.98]
+              "
             >
               Save Changes
             </button>
           </form>
         </div>
 
-        {/* LIVE PREVIEW */}
+        {/* =================================================
+            LIVE PREVIEW
+        ================================================= */}
+
         <div className="flex flex-col items-center">
-          <h2 className="mb-4 text-lg font-semibold text-white">
+          <h2 className="mb-4 text-lg font-semibold text-dt-text">
             Live Preview
           </h2>
 
@@ -315,10 +485,25 @@ function EditProfile() {
           />
         </div>
       </div>
-      {/*toast code to show profile update */}
+
+      {/* =================================================
+          SUCCESS TOAST
+      ================================================= */}
+
       {toastShow && (
-        <div className="fixed top-5 left-1/2 z-9999 -translate-x-1/2">
-          <div className="rounded-xl bg-green-500 px-6 py-3 text-white shadow-2xl">
+        <div className="fixed left-1/2 top-5 z-9999 -translate-x-1/2">
+          <div
+            className="
+              rounded-xl
+              border
+              border-green-500/20
+              bg-green-500
+              px-6
+              py-3
+              text-white
+              shadow-2xl
+            "
+          >
             <span className="font-semibold">
               ✓ Profile Updated Successfully
             </span>

@@ -242,11 +242,7 @@ const VideoCall = () => {
   }, []);
 
   // =========================================================
-  // IMPORTANT:
-  // Keep BOTH VIDEO ELEMENTS MOUNTED.
-  // We only change z-index/opacity.
-  // This prevents the large-video stream from disappearing
-  // when swapping.
+  // KEEP BOTH VIDEO ELEMENTS MOUNTED
   // =========================================================
 
   useEffect(() => {
@@ -356,7 +352,7 @@ const VideoCall = () => {
   // =========================================================
 
   return (
-    <div className="fixed inset-0 flex flex-col overflow-hidden bg-[#060608] text-white">
+    <div className="fixed inset-0 flex flex-col overflow-hidden bg-dt-background text-dt-text">
       {/* =====================================================
           HEADER
       ===================================================== */}
@@ -364,16 +360,16 @@ const VideoCall = () => {
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="z-50 flex h-14 shrink-0 items-center justify-between border-b border-white/[0.07] bg-[#0b0b0f]/90 px-3 backdrop-blur-2xl sm:h-16 sm:px-6"
+        className="z-50 flex h-14 shrink-0 items-center justify-between border-b border-dt-border bg-dt-surface/90 px-3 backdrop-blur-2xl sm:h-16 sm:px-6"
       >
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-lg shadow-indigo-500/20">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-dt-primary text-white shadow-lg shadow-dt-primary/20">
             <Video size={17} />
           </div>
 
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <h1 className="text-sm font-semibold">Video Call</h1>
+              <h1 className="text-sm font-semibold text-dt-text">Video Call</h1>
 
               {remoteSocketId && (
                 <span className="hidden rounded-full bg-emerald-400/10 px-2 py-0.5 text-[9px] font-semibold tracking-wide text-emerald-400 sm:block">
@@ -382,7 +378,7 @@ const VideoCall = () => {
               )}
             </div>
 
-            <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-gray-400 sm:text-[11px]">
+            <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-dt-muted sm:text-[11px]">
               <span
                 className={`h-1.5 w-1.5 rounded-full ${
                   remoteSocketId
@@ -401,7 +397,7 @@ const VideoCall = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="hidden items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-[10px] text-gray-500 sm:flex">
+          <div className="hidden items-center gap-1.5 rounded-full border border-dt-border bg-dt-surface-2 px-3 py-1.5 text-[10px] text-dt-muted sm:flex">
             <ShieldCheck size={13} />
             Encrypted
           </div>
@@ -420,11 +416,11 @@ const VideoCall = () => {
 
       <main
         ref={stageRef}
-        className="relative min-h-0 flex-1 p-1.5 sm:p-3 md:p-5"
+        className="relative min-h-0 flex-1 bg-dt-background p-1.5 sm:p-3 md:p-5"
       >
         {/* VIDEO CARD */}
 
-        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/[0.08] bg-[#101014] shadow-[0_25px_80px_rgba(0,0,0,0.55)] sm:rounded-3xl">
+        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-dt-border bg-black shadow-[0_25px_80px_rgba(0,0,0,0.55)] sm:rounded-3xl">
           {/* =================================================
               REMOTE VIDEO
           ================================================= */}
@@ -461,7 +457,7 @@ const VideoCall = () => {
           ================================================= */}
 
           {!remoteStream && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#101014] px-6">
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-dt-surface px-6">
               <motion.div
                 animate={{
                   scale: [1, 1.05, 1],
@@ -470,26 +466,26 @@ const VideoCall = () => {
                   duration: 2,
                   repeat: Infinity,
                 }}
-                className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-indigo-400/20 bg-indigo-500/10"
+                className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-dt-primary/20 bg-dt-primary/10"
               >
-                <div className="absolute inset-0 animate-ping rounded-full border border-indigo-400/10" />
+                <div className="absolute inset-0 animate-ping rounded-full border border-dt-primary/10" />
 
-                <Users size={30} className="text-indigo-300" />
+                <Users size={30} className="text-dt-primary" />
               </motion.div>
 
-              <h2 className="text-center text-base font-semibold sm:text-lg">
+              <h2 className="text-center text-base font-semibold text-dt-text sm:text-lg">
                 Waiting for the other person
               </h2>
 
-              <p className="mt-2 max-w-sm text-center text-xs leading-relaxed text-gray-500 sm:text-sm">
+              <p className="mt-2 max-w-sm text-center text-xs leading-relaxed text-dt-muted sm:text-sm">
                 Their video will appear here automatically when they join the
                 call.
               </p>
 
               <div className="mt-5 flex gap-1.5">
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400" />
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400 [animation-delay:150ms]" />
-                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-indigo-400 [animation-delay:300ms]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-dt-primary" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-dt-primary [animation-delay:150ms]" />
+                <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-dt-primary [animation-delay:300ms]" />
               </div>
             </div>
           )}
@@ -499,12 +495,12 @@ const VideoCall = () => {
           ================================================= */}
 
           {isLocalMain && myStream && !videoOn && (
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#111115]">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/[0.05]">
-                <VideoOff size={26} className="text-gray-500" />
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-dt-surface">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-dt-surface-2">
+                <VideoOff size={26} className="text-dt-muted" />
               </div>
 
-              <p className="mt-3 text-sm text-gray-500">Your camera is off</p>
+              <p className="mt-3 text-sm text-dt-muted">Your camera is off</p>
             </div>
           )}
 
@@ -521,10 +517,10 @@ const VideoCall = () => {
           ================================================= */}
 
           {(remoteStream || isLocalMain) && (
-            <div className="absolute bottom-4 left-4 z-30 flex items-center gap-2 rounded-xl border border-white/10 bg-black/40 px-3 py-1.5 text-xs backdrop-blur-xl sm:bottom-5 sm:left-5 sm:px-3.5 sm:py-2 sm:text-sm">
+            <div className="absolute bottom-4 left-4 z-30 flex items-center gap-2 rounded-xl border border-white/10 bg-black/40 px-3 py-1.5 text-xs text-white backdrop-blur-xl sm:bottom-5 sm:left-5 sm:px-3.5 sm:py-2 sm:text-sm">
               <span
                 className={`h-1.5 w-1.5 rounded-full ${
-                  isLocalMain ? "bg-indigo-400" : "bg-emerald-400"
+                  isLocalMain ? "bg-dt-primary" : "bg-emerald-400"
                 }`}
               />
 
@@ -621,7 +617,7 @@ const VideoCall = () => {
               {/* Local camera off */}
 
               {!isLocalMain && !videoOn && (
-                <div className="absolute inset-0 flex items-center justify-center bg-[#151519]/95">
+                <div className="absolute inset-0 flex items-center justify-center bg-black/95">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-white/[0.05]">
                     <VideoOff size={17} className="text-gray-500" />
                   </div>
@@ -639,9 +635,9 @@ const VideoCall = () => {
       <motion.footer
         initial={{ y: 25, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="z-50 shrink-0 px-3 pb-[max(10px,env(safe-area-inset-bottom))] pt-2 sm:px-4 sm:pt-3"
+        className="z-50 shrink-0 bg-dt-background px-3 pb-[max(10px,env(safe-area-inset-bottom))] pt-2 sm:px-4 sm:pt-3"
       >
-        <div className="mx-auto flex w-fit items-center gap-2 rounded-2xl border border-white/[0.08] bg-[#101014]/95 p-2 shadow-2xl shadow-black/60 backdrop-blur-2xl sm:gap-2.5 sm:rounded-3xl sm:p-2.5">
+        <div className="mx-auto flex w-fit items-center gap-2 rounded-2xl border border-dt-border bg-dt-surface/95 p-2 shadow-2xl backdrop-blur-2xl sm:gap-2.5 sm:rounded-3xl sm:p-2.5">
           {/* MIC */}
 
           <motion.button
@@ -650,7 +646,7 @@ const VideoCall = () => {
             onClick={toggleMic}
             className={`flex h-11 w-11 items-center justify-center rounded-xl transition sm:h-12 sm:w-12 sm:rounded-2xl ${
               micOn
-                ? "bg-white/[0.07] text-white hover:bg-white/[0.12]"
+                ? "bg-dt-surface-2 text-dt-text hover:bg-dt-primary/10"
                 : "bg-red-500/15 text-red-400 hover:bg-red-500/25"
             }`}
             title={micOn ? "Mute" : "Unmute"}
@@ -666,7 +662,7 @@ const VideoCall = () => {
             onClick={toggleVideo}
             className={`flex h-11 w-11 items-center justify-center rounded-xl transition sm:h-12 sm:w-12 sm:rounded-2xl ${
               videoOn
-                ? "bg-white/[0.07] text-white hover:bg-white/[0.12]"
+                ? "bg-dt-surface-2 text-dt-text hover:bg-dt-primary/10"
                 : "bg-red-500/15 text-red-400 hover:bg-red-500/25"
             }`}
             title={videoOn ? "Camera off" : "Camera on"}
@@ -684,7 +680,7 @@ const VideoCall = () => {
               }}
               type="button"
               onClick={resetPip}
-              className="hidden h-11 w-11 items-center justify-center rounded-xl bg-white/[0.07] text-gray-300 transition hover:bg-white/[0.12] hover:text-white sm:flex sm:h-12 sm:w-12 sm:rounded-2xl"
+              className="hidden h-11 w-11 items-center justify-center rounded-xl bg-dt-surface-2 text-dt-muted transition hover:bg-dt-primary/10 hover:text-dt-text sm:flex sm:h-12 sm:w-12 sm:rounded-2xl"
               title="Reset preview position"
             >
               <RotateCcw size={17} />
@@ -704,9 +700,9 @@ const VideoCall = () => {
           </motion.button>
         </div>
 
-        <div className="mt-2 flex items-center justify-center gap-1.5 text-[9px] text-gray-600 sm:mt-3 sm:text-[10px]">
+        <div className="mt-2 flex items-center justify-center gap-1.5 text-[9px] text-dt-muted sm:mt-3 sm:text-[10px]">
           <ShieldCheck size={11} />
-          <span>DevTinder secure call</span>
+          <span>Devora secure call</span>
         </div>
       </motion.footer>
     </div>

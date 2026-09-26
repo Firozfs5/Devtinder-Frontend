@@ -65,7 +65,7 @@ const Footer = () => {
 
         {/* Bottom */}
         <div className="border-t border-[#252c35] mt-8 pt-5 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm">
-          <p>© {new Date().getFullYear()} DevTinder. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Devora. All rights reserved.</p>
 
           <p className="text-gray-500">Built for developers ❤️</p>
         </div>

@@ -1,5 +1,20 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@import "./styles/themes.css";
+
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark;
+}
+
+@theme {
+  --color-dt-primary: var(--dt-primary);
+  --color-dt-background: var(--dt-background);
+  --color-dt-surface: var(--dt-surface);
+  --color-dt-text: var(--dt-text);
+  --color-dt-border: var(--dt-border);
+}
 
 /* Chat scrollbar */
 .chat-scrollbar {

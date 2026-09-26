@@ -28,6 +28,7 @@ function Requests() {
         {},
         { withCredentials: true },
       );
+
       dispatch(removeUserRequests(requestId));
       dispatch(reduceReqCount());
     } catch (err) {
@@ -41,58 +42,77 @@ function Requests() {
 
   if (!requests) {
     return (
-      <div className="min-h-[calc(100vh-74px)] bg-[#1b222a] flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="flex min-h-[calc(100vh-74px)] items-center justify-center bg-dt-background">
+        <span className="loading loading-spinner loading-lg text-dt-primary"></span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-74px)] bg-[#1b222a] px-6 py-10">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-[calc(100vh-74px)] bg-dt-background px-6 py-10">
+      <div className="mx-auto max-w-6xl">
         {/* Heading */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Connection Requests</h1>
 
-          <p className="text-gray-400 mt-2">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-dt-text">
+            Connection Requests
+          </h1>
+
+          <p className="mt-2 text-dt-muted">
             Developers who want to connect with you
           </p>
         </div>
 
         {/* No requests */}
+
         {requests.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24">
-            <div className="text-6xl mb-5">📭</div>
+            <div className="mb-5 text-6xl">📭</div>
 
-            <h2 className="text-2xl font-semibold text-white">
+            <h2 className="text-2xl font-semibold text-dt-text">
               No requests yet
             </h2>
 
-            <p className="text-gray-400 mt-2">
+            <p className="mt-2 text-center text-dt-muted">
               When someone sends you a connection request, it will appear here.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {requests.map((request) => (
               <div
                 key={request._id}
-                className="bg-[#151a21] border border-gray-700/60 rounded-2xl p-6 hover:border-indigo-500/50 transition-all duration-300"
+                className="
+                  rounded-2xl
+                  border border-dt-border
+                  bg-dt-surface
+                  p-6
+                  transition-all duration-300
+                  hover:border-dt-primary/50
+                  hover:-translate-y-1
+                  hover:shadow-lg
+                "
               >
                 {/* User info */}
+
                 <div className="flex items-center gap-4">
                   <img
                     src={request.photoUrl}
                     alt={`${request.firstName} ${request.lastName}`}
-                    className="w-20 h-20 rounded-full object-cover border-2 border-indigo-500/50"
+                    className="
+                      h-20 w-20
+                      rounded-full
+                      border-2 border-dt-primary/50
+                      object-cover
+                    "
                   />
 
-                  <div>
-                    <h2 className="text-xl font-bold text-white">
+                  <div className="min-w-0">
+                    <h2 className="text-xl font-bold text-dt-text">
                       {request.firstName} {request.lastName}
                     </h2>
 
-                    <p className="text-gray-400 mt-1">
+                    <p className="mt-1 text-dt-muted">
                       {request.age} years old
                     </p>
 
@@ -105,17 +125,34 @@ function Requests() {
                 {/* About */}
 
                 {/* Actions */}
-                <div className="flex gap-3 mt-6">
+
+                <div className="mt-6 flex gap-3">
                   <button
                     onClick={() => handleReview("accepted", request.requestId)}
-                    className="btn btn-primary btn-sm flex-1"
+                    className="
+                      btn btn-sm
+                      flex-1
+                      border-none
+                      bg-dt-primary
+                      text-white
+                      hover:bg-dt-primary-hover
+                    "
                   >
                     Accept
                   </button>
 
                   <button
                     onClick={() => handleReview("rejected", request.requestId)}
-                    className="btn btn-outline btn-sm flex-1"
+                    className="
+                      btn btn-sm
+                      flex-1
+                      border-dt-border
+                      bg-transparent
+                      text-dt-text
+                      hover:border-red-500
+                      hover:bg-red-500/10
+                      hover:text-red-500
+                    "
                   >
                     Reject
                   </button>
