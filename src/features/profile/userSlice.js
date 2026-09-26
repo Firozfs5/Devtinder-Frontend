@@ -14,8 +14,12 @@ const userSlice = createSlice({
     removeUser: () => {
       return null;
     },
+    switchTheme: (state, action) => {
+      state.theme = action.payload;
+    },
   },
 });
 
-export const { addUser, reduceReqCount, removeUser } = userSlice.actions;
+export const { addUser, reduceReqCount, removeUser, switchTheme } =
+  userSlice.actions;
 export default userSlice.reducer;

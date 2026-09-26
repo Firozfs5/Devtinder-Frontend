@@ -45,7 +45,7 @@ const Login = () => {
 
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-extrabold tracking-tight text-dt-text">
-            Dev<span className="text-dt-primary">Tinder</span>
+            Dev<span className="text-dt-primary">ora</span>
           </h1>
 
           <p className="mt-2 text-sm text-dt-muted">
@@ -78,16 +78,18 @@ const Login = () => {
                 value={emailId}
                 onChange={(e) => setEmailId(e.target.value)}
                 className="
-                  input w-full
-                  border-dt-border
-                  bg-dt-surface-2
-                  text-dt-text
-                  placeholder:text-dt-muted
-                  focus:border-dt-primary
-                  focus:outline-none
-                  focus:ring-1
-                  focus:ring-dt-primary/30
-                "
+    w-full
+    rounded-lg
+    border border-dt-border
+    bg-dt-surface-2
+    px-4 py-3
+    text-dt-text
+    placeholder:text-dt-muted
+    focus:border-dt-primary
+    focus:outline-none
+    focus:ring-1
+    focus:ring-dt-primary/30
+  "
               />
             </div>
 
@@ -113,16 +115,18 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="
-                  input w-full
-                  border-dt-border
-                  bg-dt-surface-2
-                  text-dt-text
-                  placeholder:text-dt-muted
-                  focus:border-dt-primary
-                  focus:outline-none
-                  focus:ring-1
-                  focus:ring-dt-primary/30
-                "
+    w-full
+    rounded-lg
+    border border-dt-border
+    bg-dt-surface-2
+    text-dt-text
+    placeholder:text-dt-muted
+    px-4 py-3
+    focus:border-dt-primary
+    focus:outline-none
+    focus:ring-1
+    focus:ring-dt-primary/30
+  "
               />
             </div>
 
